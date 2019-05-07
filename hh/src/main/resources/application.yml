@@ -1,0 +1,37 @@
+spring:
+  data:
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://192.168.1.123:3306/mayseven?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    ##aop
+  aop:
+    auto: true
+  ##\u6D88\u8D39\u8005
+  application:
+    name: servername
+  dubbo:
+    application:
+      name: user_consumer
+    registry:
+      address: zookeeper://192.168.1.123:2181
+    scan: com.jk.service
+
+mybatis:
+  mapperLocations: classpath*:mybatis/mapper-*.xml
+  typeAliasesPackage: com.jk.bean
+
+
+
+  redis:
+    database: 0
+    host: 192.168.88.133:27017
+    port: 6379
+    password: 123
+    timeout: 5000
+
+server:
+  port: 8081
