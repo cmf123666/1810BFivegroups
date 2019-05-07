@@ -27,8 +27,6 @@
             <version>3.1.13</version>
         </dependency>
 
-
-
         <!--生产者-->
         <dependency>
             <groupId>io.dubbo.springboot</groupId>
@@ -50,7 +48,7 @@
         </dependency>
 
         <!--redis-->
-        <dependency>
+        <!--<dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.38</version>
@@ -58,11 +56,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
+        </dependency>-->
 
         <!--mongoDB相关jar包-->
         <!--mongoDB相关jar包-->
-        <dependency>
+       <!-- <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
@@ -71,7 +69,7 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-mongodb</artifactId>
 
-        </dependency>
+        </dependency>-->
 
         <!-- 数据库连接池 -->
         <dependency>
@@ -81,7 +79,7 @@
         </dependency>
 
         <!--aop日志-->
-        <dependency>
+        <!--<dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
@@ -94,7 +92,7 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-email</artifactId>
             <version>1.5</version>
-        </dependency>
+        </dependency>-->
 
         <!-- 阿里云OSS-->
         <dependency>
@@ -148,6 +146,8 @@
             <version>1.2.38</version>
         </dependency>
     </dependencies>
+
+
 
     <build>
         <plugins>
