@@ -12,6 +12,7 @@ public class UserBean implements Serializable {
         private String uid;//id
         private String userId;//用户账号
         private String userPassword;//用户密码
+        private String userName;//用户名字
         private String postId;//角色关联
         private String mail;//邮箱
         private String phoneNumber;//手机号码
