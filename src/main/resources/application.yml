@@ -2,6 +2,10 @@ spring:
   data:
     mongodb:
       uri: mongodb://192.168.88.133:27017/1810cc
+  redis:
+    host: 192.168.1.155
+    port: 6379
+    password: 123
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://192.168.1.123:3306/mayseven?useUnicode=true&characterEncoding=utf-8
@@ -23,16 +27,7 @@ spring:
 
 mybatis:
   mapperLocations: classpath*:mybatis/mapper-*.xml
-  typeAliasesPackage: com.jk.pojo
-
-
-
-  redis:
-    database: 0
-    host: 192.168.88.133:27017
-    port: 6379
-    password: 123
-    timeout: 5000
+  typeAliasesPackage: com.jk.bean
 
 server:
   port: 8081
