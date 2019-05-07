@@ -7,9 +7,10 @@ import java.util.Date;
 
 @Data
 public class LiushuiBean implements Serializable {
-         private String LiushuiId;//
-         private String LiushuiName;//
-         private String LiushuiRoom;//
+         private String liushuiId;//
+         private String liushuiName;//
+         private String liushuilocation;//
+         private String liushuiRoom;//
          private String payCount;//
          private String billType;//
          private String payType;//

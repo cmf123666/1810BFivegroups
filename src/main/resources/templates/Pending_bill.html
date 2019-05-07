@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <script src="/js/jquery-1.8.0.js"></script>
+
+</head>
+<link rel="stylesheet" href="/js/easyui-1.7.0/themes/metro/easyui.css">
+<link rel="stylesheet" href="/js/easyui-1.7.0/themes/icon.css">
+<script src="/js/easyui-1.7.0/jquery.min.js"></script>
+<script src="/js/easyui-1.7.0/jquery.easyui.min.js"></script>
+<script src="/js/easyui-1.7.0/plugins/jquery.datagrid.js"></script>
+
+<body>
+<div id="tb">
+    待收总额：
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <select id="cc" class="easyui-combobox" name="dept" style="width:120px;">
+        <option>账单房号</option>
+        <option>付款方</option>
+    </select>
+    <input class="easyui-textbox"  style="width:200px" align="right">
+    <a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>
+
+</div>
+<table id="dg"></table>
+
+<!--确认收款对话框-->
+<div id="confirmDialog" class="easyui-dialog" title="确认收款" style="width:480px;height:330px;"
+     data-options="iconCls:'icon-save',resizable:true,modal:true">
+
+        实收金额：
+        <input class="easyui-textbox" id="re"  style="width:130px" >
+        应收金额：<span id="cash"></span>
+        <br> <br>
+        收款方式：
+        <select id="payType" class="easyui-combobox"  style="width:130px;">
+            <option value="1">现金</option>
+            <option value="2">支付宝</option>
+            <option value="3">微信支付</option>
+            <option value="4">转账</option>
+        </select>
+        收款时间：<input class="easyui-textbox" id="ctime" style="width:130px" align="right">
+        <br> <br>
+        备注：<input class="easyui-textbox" data-options="multiline:true" value=" " style="width:380px;height:120px">
+        <br> <br> <br> <br>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <a id="btn" href="javascript:add()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">确认</a>
+        <a id="btn" href="javascript:rollbill()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+
+</div>
+<!--更多-->
+<div id="more" class="easyui-dialog" title="更多" style="width:350px;height:230px;"
+     data-options="iconCls:'icon-save',resizable:true,modal:true">
+    <form id="more" method="post">
+       <table>
+           <tr>
+               <td>账单房号：<span id="roomlocation"></span>
+                            <span id="roomId"></span></td>
+               <td>付款方：<span id="payer"></span></td>
+           </tr>
+           <tr>
+               <td>账单金额：<span id="billcount"></span></td>
+               <td>账单类型：<span id="billtype"></span></td>
+           </tr>
+           <tr>
+               <td>账单时效：
+                   <span id="startDate"></span>
+                   到
+                   <span id="endDate"></span>
+               </td>
+               <td></td>
+           </tr>
+           <tr>
+               <td>预计付款时间：<span id="reserveTime"></span></td>
+               <td></td>
+           </tr>
+       </table>
+        <br> <br> <br> <br>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <a id="btn" href="javascript:comfirmBill()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">确认收款</a>
+        <a id="btn" href="javascript:roll()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">收起</a>
+    </form>
+</div>
+</body>
+<script type="text/javascript" th:inline="none">
+/*页面加载*/
+$(function(){
+    query();
+    $("#confirmDialog").dialog("close")
+    $("#more").dialog("close")
+})
+/*查询方法*/
+function query(){
+    $('#dg').datagrid({
+        url:'query',
+        toolbar:'#tb',
+        singleSelect:true,
+        columns:[[
+            {field:'rid',title:'ID',width:100,hidden:true},
+            {field:'startDate',title:'合同开始',width:100,hidden:true},
+            {field:'endData',title:'合同结束',width:100,hidden:true},
+            {field:'renterlocation',title:'账单房号',formatter:function(value,row,index){
+                    return value + row.renterNumber
+                }},
+            {field:'renterName',title:'付款方',width:100},
+            {field:'billCount',title:'账单金额',width:100,align:'right'},
+            {field:'billType',title:'账单类型',width:100,align:'right'},
+            {field:'payDate',title:'预计付款时间',width:100,align:'right'},
+            {field:'xxxx',title:'操作', formatter: function(value,row,index){
+                    var content = "<a href='javascript:comfirmBill(&quot;"+row.renterlocation+"&quot;,"+
+                        row.renterNumber+",&quot;"+row.renterName+"&quot;,"+row.billCount+","+row.billType+
+                        ",&quot;"+row.payDate+"&quot;,"+
+                        ")' class='easyui-linkbutton' iconCls:'icon-cancel'>确认收款</a>";
+
+                    content += " |  <a href='javascript:more(&quot;"+row.renterlocation+"&quot;,"+row.rid+
+                       ","+row.renterNumber+",&quot;"+row.renterName+"&quot;,"+row.billCount+","+row.billType+",&quot;"
+                        +row.startDate+"&quot;,&quot;"+row.endData+"&quot;,&quot;"+row.payDate+"&quot;,"+
+                        ")' class='easyui-linkbutton' iconCls='icon-search'>更多</a>";
+                    return content;
+                },width:$(this).width() * 0.1}
+        ]],
+        pagination:true,
+        pageSize:5,
+        pageList:[1,2,3,4,5]
+    });
+}
+/*开启确认收款对话框*/
+function  comfirmBill(billCount) {
+    $("#re").textbox('setValue',billCount);
+    var cash = $("#cash");
+    cash.html(billCount);
+    var time1 = new Date()
+    var s1 = time1.toLocaleDateString();
+    $("#ctime").textbox('setValue',s1);
+    $("#confirmDialog").dialog("open")
+}
+/**/
+function more(roomlocation,roomId,payer,billcount,billtype,startDate,endDate,reserveTime) {
+    $("#roomlocation").html(roomlocation);
+    $("#roomId").html(roomId);
+    $("#payer").html(payer);
+    $("#billcount").html(billcount);
+    $("#billtype").html(billtype);
+    $("#startDate").html(startDate);
+    $("#endDate").html(endDate);
+    $("#reserveTime").html(reserveTime);
+    $("#more").dialog("open")
+}
+
+/*点击确认方法*/
+function  add(renterlocation,rid,renterNumber,renterName,billCount,billType,payDate){
+    var payType = $("#payType").val();
+    $.ajax({
+        url:"add",
+        type:"post",
+            data:{renterlocation:renterlocation,
+            rid:rid,
+            renterNumber:renterNumber,
+            renterName:renterName,
+            billCount:billCount,
+            billType:billType,
+            payDate:payDate,
+            payType:payType
+        },
+        success:function(data){
+
+        }
+    })
+}
+
+/*收起*/
+function roll(){
+    $("#more").dialog("close")
+}
+/*取消*/
+function rollbill(){
+    $("#confirmDialog").dialog("close")
+}
+</script>
+</html>
