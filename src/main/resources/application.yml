@@ -23,7 +23,7 @@ spring:
 
 mybatis:
   mapperLocations: classpath*:mybatis/mapper-*.xml
-  typeAliasesPackage: com.jk.pojo
+  typeAliasesPackage: com.jk.bean
 
 
 
