@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="js/jquery-1.8.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="js/easyui-1.7.0/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="js/easyui-1.7.0/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="js/easyui-1.7.0/demo.css">
+    <script type="text/javascript" src="js/easyui-1.7.0/jquery.min.js"></script>
+    <script type="text/javascript" src="js/easyui-1.7.0/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/easyui-1.7.0/plugins/jquery.datagrid.js"></script>
+</head>
+<body algin="center">
+
+
+    <form id="ff">
+          <input type="hidden" th:value="${c?.pid}" name="pid">
+         <table border="0" cellpadding="10" >
+             <tr>
+                 <td>职位名称</td>
+                 <td cols="3"><input  type="text"  th:value="${c?.pname}" id="name"  name = "pname"  placeholder="请输入职位名称" style="width:100px" >
+                     <span id="span"></span>
+                 </td>
+
+             </tr>
+             <tr>
+                 <td>职位范围</td>
+                 <td cols="3">   插件管理</td>
+
+             </tr>
+             <tr>
+                 <td></td>
+                 <td><input type="checkbox">添加插件</td>
+                 <td><input type="checkbox">删除插件</td>
+                 <td cols="2">  </td>
+
+             </tr>
+             <tr>
+                 <td></td>
+                 <td cols="3">   人员管理</td>
+             </tr>
+             <tr>
+                 <td></td>
+                 <td><input type="checkbox">账号配置</td>
+                 <td><input type="checkbox">权限配置</td>
+                 <td cols="2">  </td>
+             </tr>
+             <tr>
+                 <td></td>
+                 <td cols="3">   财务管理</td>
+             </tr>
+             <tr>
+                 <td></td>
+                 <td><input type="checkbox">代收账单</td>
+                 <td><input type="checkbox">待支账单</td>
+                 <td cols="2"> <input type="checkbox"><input type="checkbox">收支流水</td>
+             </tr>
+             <tr>
+                 <td></td>
+                 <td cols="3">  合同管理</td>
+             </tr>
+             <tr>
+                 <td></td>
+                 <td><input type="checkbox">租客合同</td>
+                 <td><input type="checkbox">房东合同</td>
+                 <td cols="2"> </td>
+             </tr>
+             <tr>
+                 <td></td>
+                 <td cols="3">  企业配置</td>
+             </tr>
+             <tr>
+                 <td></td>
+                 <td><input type="checkbox">数据导入</td>
+                 <td><input type="checkbox">选项配置</td>
+                 <td cols="2"> </td>
+             </tr>
+             <tr>
+                 <td></td>
+                 <td cols="3">  手机端</td>
+             </tr>
+             <tr>
+                 <td></td>
+                 <td><input type="checkbox">待租房源</td>
+                 <td><input type="checkbox">房源管理</td>
+                 <td><input type="checkbox">催收提醒</td>
+                 <td cols="2"> <input type="checkbox">新增房源</td>
+             </tr>
+             <tr>
+                 <td></td>
+                 <td><input type="checkbox">到期提醒</td>
+                 <td></td>
+                 <td></td>
+                 <td></td>
+             </tr>
+         </table>
+        <a id="btn" href="javascript:loginUser()" class="easyui-linkbutton" width="50">确定</a>
+    </form>
+</body>
+<script type="text/javascript">
+   function  loginUser (){
+       var name=document.getElementById("name").value;
+       var msg=document.getElementById("span");
+       var reg=/^[0-9a-zA-Z\u4e00-\u9fa5]{1,8}$/;
+       if(reg.test(name)){
+           var data=$("#ff").serialize();
+           $.ajax({
+               url:"addzhiwei",
+               data:data,
+               type:"post",
+               success:function(data){
+                   location.href="zhifu";
+               },error:function(){
+               }
+           })
+           msg.innerHTML="";
+           return true;
+       }
+       msg.innerHTML="<font color='red'>长度不超过8个文字</font>";
+       return false;
+   }
+
+</script>
+</html>
