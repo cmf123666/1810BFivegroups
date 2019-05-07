@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>根据用户ID展示用户信息</title>
+    <link rel="stylesheet" href="/js/easyui-1.7.0/themes/metro/easyui.css">
+    <link rel="stylesheet" href="/js/easyui-1.7.0/themes/icon.css">
+    <script src="/js/easyui-1.7.0/jquery.min.js"></script>
+    <script src="/js/easyui-1.7.0/jquery.easyui.min.js"></script>
+    <script src="/js/easyui-1.7.0/plugins/jquery.datagrid.js"></script>
+</head>
+<body>
+<!--用于分页-->
+<div id="toolbar">
+    <tr>
+        <td>
+            <a class="easyui-linkbutton" onclick="addBtn()" data-options="iconCls:'icon-add',plain:true">新增</a>
+        </td>
+    </tr>
+</div>
+<!--用户展示-->
+<table id="userTable"></table>
+</body>
+<script>
+    /*页面加载*/
+    $(function () {
+        initUserTable();/*用户*/
+    })
+
+    /*点击新增跳到新增页面*/
+    function addBtn(){
+        location.href="/addOrUpdateUser";//跳转到新增页面
+    }
+
+    /*用户查询展示*/
+    function initUserTable(){
+        $("#userTable").datagrid({
+            url:'/findUserList',
+            fit:true,
+            pagination:true,
+            toolbar:'#toolbar',
+            pageSize:6,
+            pageList:[2,4,6,8,10,20],
+            singleSelect:true,//只允许选择一行
+            idField:"id",//指明哪一个字段是标识字段一般用id
+            columns: [ [
+                {field:'userName',title:'使用人'},
+                {field:'userId',title:'账号'},
+                {field:'phoneNumber',title:'手机号'},
+                {field:'postName',title:'职位'},
+                {field:'lastDate',title:'最后登录时间'},
+                {field:'123',title:'操作',formatter:function(value,row,index){
+                        return '<a href="javascript:del('+row.uid+','+row.userId+')">删除</a>|<a href="javascript:editUser('+row.uid+')">修改</a>'
+                    }}
+            ] ]
+        })
+    }
+    /*删除*/
+    function del(uid,userId){
+        $.messager.confirm('提示','您确定删除吗',function(r){
+            if(r){
+                $.ajax({
+                    url:'/deleteUserById',
+                    type:'post',
+                    data:{
+                        id:uid,
+                        userId:userId
+                    },
+                    dataType:'json',
+                    success:function(data){
+                        if(data=="0"){
+                            $("#userTable").datagrid('reload');//重新加载
+                        }else{
+                            $.messager.alert('提示','删除失败!还有房源该账号在管理 请转移或删除房源后重试','error')
+                        }
+                    }
+                })
+            }
+        })
+    }
+
+
+    /*修改人员表*/
+    function editUser(uid){
+        alert(uid)
+        location.href="/fingUserInfoById?id="+uid;
+    }
+</script>
+</html>
