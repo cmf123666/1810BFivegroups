@@ -1,6 +1,9 @@
 package com.jk.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.jk.bean.LandlordBean;
+import com.jk.bean.LiushuiBean;
+import com.jk.bean.RenterBean;
 import com.jk.bean.UserBean;
 import com.jk.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @RequestMapping("user")
@@ -74,6 +74,12 @@ public class LoginController {
             HttpSession session = request.getSession();
             session.setAttribute("code",str);
             session.setMaxInactiveInterval(60);
+//            ValueOperations ops = redisTemplate.opsForValue();
+//            ops.set("code",str,60, TimeUnit.SECONDS);
+//            Long expire = redisTemplate.getExpire("code");
+//            if (expire==0){
+//                redisTemplate.delete("code");
+//            }
             return str;
         }
         return "请输入正确的手机号";
@@ -85,9 +91,24 @@ public class LoginController {
         HttpSession session = request.getSession();
         String str= (String) session.getAttribute("code");
         if(code.equals(str)){
+            //这里要把user对象放到session
             return "登陆成功";
         }
         return "验证码错误！！！";
+    }
+
+    @RequestMapping("totalMoney")
+    @ResponseBody
+    public Map<String,Object> totalMoney(String num){
+        LiushuiBean liushui=new LiushuiBean();
+        liushui.setNum(num);
+        double shouru=loginService.findShouru(liushui);
+        double zhichu=loginService.findZhichu(liushui);
+        Map<String,Object> map=new HashMap<>();
+        map.put("shouru",shouru);
+        map.put("zhichu",zhichu);
+        map.put("lirun",shouru-zhichu);
+        return map;
     }
 
 

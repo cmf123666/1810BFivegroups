@@ -24,4 +24,9 @@ public class ViewController {
     public String login3(){
         return "login3";
     }
+
+    @RequestMapping("index")
+    public String index(){
+        return "index";
+    }
 }

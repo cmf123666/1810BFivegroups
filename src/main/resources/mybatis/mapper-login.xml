@@ -22,4 +22,54 @@
         zhiId=#{u.zhiId},endTime=#{u.endTime} where uid=#{u.uid}
     </update>
 
+    <select id="findShouru" resultType="double">
+        select sum(payCount) from  mayliushui where true
+        <if test="l.num==1">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 7 DAY)
+        </if>
+        <if test="l.num==2">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 30 DAY)
+        </if>
+        <if test="l.num==3">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 90 DAY)
+        </if>
+        <if test="l.num==4">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 180 DAY)
+        </if>
+        and status='1'
+    </select>
+
+    <select id="findZhichu" resultType="double">
+        select sum(payCount) from mayliushui where true
+        <if test="l.num==1">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 7 DAY)
+        </if>
+        <if test="l.num==2">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 30 DAY)
+        </if>
+        <if test="l.num==3">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 90 DAY)
+        </if>
+        <if test="l.num==4">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 180 DAY)
+        </if>
+        and status='2'
+    </select>
+
+<!--    <select id="total1" resultType="double">-->
+<!--        SELECT SUM(billCount) FROM mayrenter where true-->
+<!--        <if test="r.num==1">-->
+<!--            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 7 DAY)-->
+<!--        </if>-->
+<!--        <if test="r.num==2">-->
+<!--            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 30 DAY)-->
+<!--        </if>-->
+<!--        <if test="r.num==3">-->
+<!--            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 90 DAY)-->
+<!--        </if>-->
+<!--        <if test="r.num==4">-->
+<!--            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 180 DAY)-->
+<!--        </if>-->
+<!--    </select>-->
+
 </mapper>

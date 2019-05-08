@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<br>
+&emsp;<select id="slt" onchange="aa()">
+    <option value="1">近七天</option>
+    <option value="2">近一个月</option>
+    <option value="3">近三个月</option>
+    <option value="4">近半年</option>
+    </select><br><br>
+&emsp;收入: <span id="shouru"></span><br><br>
+&emsp;支出: <span id="zhichu"></span><br><br>
+&emsp;利润: <span id="lirun"></span><br><br>
+</body>
+<script src="assets/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript">
+    var num=$("#slt").val();
+    $.ajax({
+        url:"user/totalMoney",
+        type:"post",
+        data:{num:num},
+        success:function (data) {
+            $("#shouru").html(data.shouru);
+            $("#zhichu").html(data.zhichu);
+            $("#lirun").html(data.lirun);
+        }
+    })
+    function aa() {
+        var num1=$("#slt").val();
+        $.ajax({
+            url:"user/totalMoney",
+            type:"post",
+            data:{num:num1},
+            success:function (data) {
+                $("#shouru").html(data.shouru);
+                $("#zhichu").html(data.zhichu);
+                $("#lirun").html(data.lirun);
+            }
+        })
+    }
+</script>
+</html>
