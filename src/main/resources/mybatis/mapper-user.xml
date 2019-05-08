@@ -6,10 +6,9 @@
 <mapper namespace="com.jk.dao.UserMapper">
   <!--用户表查询分页-->
     <select id="findUserList" parameterType="map" resultType="com.jk.bean.UserBean">
-     select  date_format(endTime,'%Y-%m-%d %H:%i')as endTime ,mu.userName,mu.userId,mu.phoneNumber,mu.postId,
+     select mu.uid,mu.endTime,mu.userName,mu.userId,mu.phoneNumber,mu.postId,
       mp.pname as postName from mayuser mu,maypost mp where mu.postId = mp.pid
         limit #{start},#{rows}
-        date_formatter(engTime,"yyyy-MM-dd%Y")
     </select>
     <!--用户表新增-->
     <insert id="saveUser" parameterType="com.jk.bean.UserBean">

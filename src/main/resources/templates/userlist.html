@@ -42,7 +42,7 @@
             pageSize:4,
             pageList:[2,4,6,8,10,20],
             singleSelect:true,//只允许选择一行
-            idField:"id",//指明哪一个字段是标识字段一般用id
+            idField:"uid",//指明哪一个字段是标识字段一般用id
             columns: [ [
                 {field:'userName',title:'使用人'},
                 {field:'userId',title:'账号'},
@@ -50,7 +50,7 @@
                 {field:'postName',title:'职位'},
                 {field:'endTime',title:'最后登录时间'},
                 {field:'123',title:'操作',formatter:function(value,row,index){
-                        return '<a href="javascript:del('+row.uid+','+row.userId+')">删除</a>|<a href="javascript:editUser('+row.uid+')">修改</a>'
+                        return '<a href="javascript:del(&quot;'+row.uid+'&quot;,&quot;'+row.userId+'&quot;)">删除</a>|<a href="javascript:editUser(&quot;'+row.uid+'&quot;)">修改</a>'
                     }}
             ] ]
         })

@@ -18,8 +18,8 @@ public class UserBean implements Serializable {
         private String phoneNumber;//手机号码
         private String shouId;//关联的收取钱的id；对应租客表
         private String zhiId;//关联的是支付房东的id，对应房东表
-        @DateTimeFormat(pattern = "yyyy-MM-dd")
-        @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "GMT+8")
         private Date endTime;
         private String userName;//使用人
 }
