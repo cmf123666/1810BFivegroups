@@ -6,12 +6,12 @@
 <mapper namespace="com.jk.dao.UserMapper">
   <!--用户表查询分页-->
     <select id="findUserList" parameterType="map" resultType="com.jk.bean.UserBean">
-      select mu.endTime as lastDate,mu.userName,mu.userId,mu.phoneNumber,mu.postId,mp.pname as postName from mayuser mu,maypost mp where mu.postId = mp.pid
+      select mu.*,mp.pname as postName from mayuser mu,maypost mp where mu.postId = mp.pid
         limit #{start},#{rows}
     </select>
     <!--用户表新增-->
     <insert id="saveUser" parameterType="com.jk.bean.UserBean">
-        insert into mayuser(userName,phoneNumber,postId,userPassword,userId) values(#{userName},#{phoneNumber},#{postId},#{userPassword},#{userId})
+        insert into mayuser(userName,phoneNumber,postId,userPassword,userId,endTime) values(#{userName},#{phoneNumber},#{postId},#{userPassword},#{userId},#{endTime})
     </insert>
   <!--根据ID回显人员表-->
   <select id="fingUserInfoById" parameterType="string" resultType="com.jk.bean.UserBean">
