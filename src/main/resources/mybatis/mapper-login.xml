@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jk.mapper.LoginMapper">
+
+    <select id="login" resultType="userBean">
+        select * from mayuser where (userId=#{userBean.userId} or mail=#{userBean.userId})
+        and userPassword=#{userBean.userPassword}
+    </select>
+
+    <select id="findUserByPhone" resultType="userBean">
+        select * from mayuser where
+        phoneNumber=#{phoneNumber}
+    </select>
+    
+    <update id="updLastDate">
+        update mayuser set userId=#{u.userId},userName=#{u.userName},userPassword=#{u.userPassword},
+        phoneNumber=#{u.phoneNumber},
+        postId=#{u.postId},mail=#{u.mail},shouId=#{u.shouId},
+        zhiId=#{u.zhiId},endTime=#{u.endTime} where uid=#{u.uid}
+    </update>
+
+</mapper>
