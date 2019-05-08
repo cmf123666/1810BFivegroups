@@ -24,4 +24,6 @@ public class ViewController {
     public String login3(){
         return "login3";
     }
+    @RequestMapping("tree")
+    public String tree(){ return "Tree"; }
 }

@@ -1,7 +1,8 @@
-package com.jk.service;
+package com.jk.service.impl;
 
 import com.jk.bean.Postbean;
 import com.jk.mapper.ChanpinMapper;
+import com.jk.service.CpService;
 import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class CpServiceImpl  implements CpService{
+public class CpServiceImpl  implements CpService {
 
     @Resource
     ChanpinMapper chanpinMapper;

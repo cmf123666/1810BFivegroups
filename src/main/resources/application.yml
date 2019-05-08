@@ -20,9 +20,9 @@ spring:
     name: servername
   dubbo:
     application:
-      name: user_consumer
+      name: tree_consumer
     registry:
-      address: zookeeper://192.168.1.123:2181
+      address: zookeeper://127.0.0.1:2181
     scan: com.jk.service
 
 mybatis:

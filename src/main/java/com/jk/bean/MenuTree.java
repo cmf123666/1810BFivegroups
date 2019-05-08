@@ -13,7 +13,7 @@ public class MenuTree implements Serializable {
 
 	private String id;
     
-    private String pId; //父节点id
+    private String pId; //鐖惰妭鐐筰d
     
     private String text;
     
@@ -21,9 +21,9 @@ public class MenuTree implements Serializable {
     
     private String url;
     
-    private Map<String, Object> attributes = new HashMap<String, Object>(); // 添加到节点的自定义属性
+    private Map<String, Object> attributes = new HashMap<String, Object>(); // 娣诲姞鍒拌妭鐐圭殑鑷畾涔夊睘鎬�
     
-    private List<MenuTree> nodes; //子节点数据
+    private List<MenuTree> children; //瀛愯妭鐐规暟鎹�
 
 	public String getId() {
 		return id;
@@ -73,13 +73,13 @@ public class MenuTree implements Serializable {
 		this.attributes = attributes;
 	}
 
-	public List<MenuTree> getNodes() {
-		return nodes;
+	public List<MenuTree> getChildren() {
+		return children;
 	}
 
-	public void setNodes(List<MenuTree> nodes) {
-		this.nodes = nodes;
+	public void setChildren(List<MenuTree> children) {
+		this.children = children;
 	}
-
+    
     
 }

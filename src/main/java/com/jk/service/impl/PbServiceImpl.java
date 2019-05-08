@@ -1,8 +1,9 @@
-package com.jk.service;
+package com.jk.service.impl;
 
 import com.jk.bean.LiushuiBean;
 import com.jk.bean.RenterBean;
 import com.jk.mapper.PbMapper;
+import com.jk.service.PbService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class PbServiceImpl implements PbService{
+public class PbServiceImpl implements PbService {
     @Autowired
     PbMapper pbMapper;
 

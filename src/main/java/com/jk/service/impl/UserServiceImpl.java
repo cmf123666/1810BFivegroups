@@ -1,8 +1,9 @@
-package com.jk.service;
+package com.jk.service.impl;
 
 import com.jk.bean.Postbean;
 import com.jk.bean.UserBean;
 import com.jk.mapper.UserMapper;
+import com.jk.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
 

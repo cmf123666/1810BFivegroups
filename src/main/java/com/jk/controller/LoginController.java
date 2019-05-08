@@ -1,8 +1,11 @@
 package com.jk.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.jk.bean.MenuTree;
 import com.jk.bean.UserBean;
 import com.jk.service.LoginService;
+import com.jk.service.TreeService;
+import com.jk.utils.TreeNoteUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -10,9 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,11 +25,14 @@ import java.util.concurrent.TimeUnit;
 @Controller
 public class LoginController {
 
-    @Autowired
+    @Resource
     private LoginService loginService;
 
     @Autowired
     private RedisTemplate redisTemplate;
+    @Resource
+    TreeService treeService;
+
 
 
     @RequestMapping("login4")
@@ -90,6 +96,16 @@ public class LoginController {
         return "验证码错误！！！";
     }
 
+
+
+    @RequestMapping("getTreeAll")
+    public @ResponseBody
+    List<MenuTree> getTreeAll(){
+        List<MenuTree> list = treeService.getTreeAll();
+        //将 数据库中返回的数据转换成easyui识别的数据格式
+        list=TreeNoteUtil.getFatherNode(list);
+        return list;
+    }
 
 
 }

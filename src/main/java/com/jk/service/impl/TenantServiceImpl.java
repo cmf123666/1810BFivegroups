@@ -1,7 +1,8 @@
-package com.jk.service;
+package com.jk.service.impl;
 
 import com.jk.bean.RenterBean;
 import com.jk.mapper.TenantDao;
+import com.jk.service.TenantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
