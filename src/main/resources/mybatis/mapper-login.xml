@@ -15,10 +15,11 @@
         phoneNumber=#{phoneNumber}
     </select>
     
-    <update id="updLastDate" parameterType="userBean">
-        update mayuser set userId=#{u.userId} userName=#{u.userName},phoneNumber=#{u.phoneNumber},
-        postId=#{u.postId},userPassword=#{u.userPassword},mail=#{u.mail},shouId=#{u.shouId},
-        zhiId=#{u.zhiId},lastDate=#{u.lastDate} where uid=#{u.uid}
+    <update id="updLastDate">
+        update mayuser set userId=#{u.userId},userName=#{u.userName},userPassword=#{u.userPassword},
+        phoneNumber=#{u.phoneNumber},
+        postId=#{u.postId},mail=#{u.mail},shouId=#{u.shouId},
+        zhiId=#{u.zhiId},endTime=#{u.endTime} where uid=#{u.uid}
     </update>
 
 </mapper>
