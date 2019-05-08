@@ -34,6 +34,7 @@ public class RenterBean implements Serializable {
        private Date endData;//预计付款时间
 
        private  String status;//状态
+       private String num;
 
        private String water;//水表
        private String dian;//电表
@@ -52,4 +53,3 @@ public class RenterBean implements Serializable {
 
        private  String temp;
 }
-

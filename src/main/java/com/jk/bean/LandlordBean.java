@@ -20,6 +20,7 @@ public class LandlordBean implements Serializable {
         private Date  payDate;//预计到款时间
         private String payType;//付款方式
         private String shouquId; //与用户表支付的id关联；
+        private String num;
         private String status;//状态
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")

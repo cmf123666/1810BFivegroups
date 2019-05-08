@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jk.mapper.LoginMapper">
+
+    <select id="login" resultType="userBean">
+        select * from mayuser where (userId=#{userBean.userId} or mail=#{userBean.userId})
+        and userPassword=#{userBean.userPassword}
+    </select>
+
+    <select id="findUserByPhone" resultType="userBean">
+        select * from mayuser where
+        phoneNumber=#{phoneNumber}
+    </select>
+    
+    <update id="updLastDate">
+        update mayuser set userId=#{u.userId},userName=#{u.userName},userPassword=#{u.userPassword},
+        phoneNumber=#{u.phoneNumber},
+        postId=#{u.postId},mail=#{u.mail},shouId=#{u.shouId},
+        zhiId=#{u.zhiId},endTime=#{u.endTime} where uid=#{u.uid}
+    </update>
+
+    <select id="findShouru" resultType="double">
+        select sum(payCount) from  mayliushui where true
+        <if test="l.num==1">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 7 DAY)
+        </if>
+        <if test="l.num==2">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 30 DAY)
+        </if>
+        <if test="l.num==3">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 90 DAY)
+        </if>
+        <if test="l.num==4">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 180 DAY)
+        </if>
+        and status='1'
+    </select>
+
+    <select id="findZhichu" resultType="double">
+        select sum(payCount) from mayliushui where true
+        <if test="l.num==1">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 7 DAY)
+        </if>
+        <if test="l.num==2">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 30 DAY)
+        </if>
+        <if test="l.num==3">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 90 DAY)
+        </if>
+        <if test="l.num==4">
+            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 180 DAY)
+        </if>
+        and status='2'
+    </select>
+
+<!--    <select id="total1" resultType="double">-->
+<!--        SELECT SUM(billCount) FROM mayrenter where true-->
+<!--        <if test="r.num==1">-->
+<!--            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 7 DAY)-->
+<!--        </if>-->
+<!--        <if test="r.num==2">-->
+<!--            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 30 DAY)-->
+<!--        </if>-->
+<!--        <if test="r.num==3">-->
+<!--            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 90 DAY)-->
+<!--        </if>-->
+<!--        <if test="r.num==4">-->
+<!--            and payDate >= DATE_SUB(SYSDATE(),INTERVAL 180 DAY)-->
+<!--        </if>-->
+<!--    </select>-->
+
+</mapper>
