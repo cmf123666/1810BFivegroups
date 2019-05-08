@@ -67,11 +67,11 @@
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
 
-        <dependency>
+       <!-- <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-mongodb</artifactId>
 
-        </dependency>
+        </dependency>-->
 
         <!-- 数据库连接池 -->
         <dependency>

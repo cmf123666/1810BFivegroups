@@ -1,10 +1,9 @@
 spring:
   data:
-    mongodb:
-      uri: mongodb://192.168.88.133:27017/1810cc
+
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://192.168.1.123:3306/cmf?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://192.168.1.123:3306/mayseven?useUnicode=true&characterEncoding=utf-8
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
@@ -23,7 +22,7 @@ spring:
 
 mybatis:
   mapperLocations: classpath*:mybatis/mapper-*.xml
-  typeAliasesPackage: com.jk.pojo
+  typeAliasesPackage: com.jk.bean
 
 
 

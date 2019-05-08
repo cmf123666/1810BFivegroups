@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/jdbc">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/js/easyui-1.7.0/themes/metro/easyui.css">
+    <link rel="stylesheet" href="/js/easyui-1.7.0/themes/icon.css">
+    <script src="/js/easyui-1.7.0/jquery.min.js"></script>
+    <script src="/js/easyui-1.7.0/jquery.easyui.min.js"></script>
+    <script src="/js/easyui-1.7.0/plugins/jquery.datagrid.js"></script>
+
+    <title>Title</title>
+
+</head>
+<body>
+
+<div id="tenantDialog"  class="easyui-dialog" data-options="modal:true,closed:true,
+buttons:[{
+	text:'收起',
+	plain:true,
+	iconCls:'icon-cancel',
+	handler:function(){
+	guanbitenantDialog();
+	}
+}]
+" style="width: 710px;height: 630px">
+    <div  style="margin: 15px 0px 0px 15px">
+        <form method="post" id="commentsfrom">
+            <table>
+                <tr>
+                    <h3>租客信息</h3>
+                    <td>租客姓名</td>
+                    <td>
+                        <input type="text" style="border: 0px";  name="renterName" > </td>
+                </tr>
+                <tr>
+                    <td>身份证号码</td>
+                    <td><input type="text" style="border: 0px"; name="sidentity" > </td>
+                </tr>
+                <tr>
+                    <td>紧急联系人</td>
+                    <td><input type="text" style="border: 0px"; name="surgencyPhone" > </td>
+                </tr>
+                <tr>
+                    <td>联系方式</td>
+                    <td><input type="text" style="border: 0px"; name="sphone" > </td>
+                </tr>
+
+
+            </table>
+            <HR align=center width=600 color=#987cb9 SIZE=1>
+            <table>
+                <tr>
+                    <h3>合同信息</h3>
+                    <td>入住房间</td>
+                    <td>
+                        <input type="text" style="border: 0px"; name="renterLocation" >
+                        <input type="text" style="border: 0px"; name="renterNumber" > </td>
+                </tr>
+                <tr>
+                    <td>合同起止日期</td>
+                    <td><input  type="text" style="border: 0px"; name="startDate" > </td>
+                    <td><input type="text" style="border: 0px"; name="endData" > </td>
+                </tr>
+                <tr>
+                    <td>租金</td>
+                    <td><input  type="text" style="border: 0px"; name="srent" > </td>
+                </tr>
+                <tr>
+                    <td>押金</td>
+                    <td><input  type="text" style="border: 0px"; name="syajin" > </td>
+                </tr>
+             <tr>
+                    <td>房租支付方式</td>
+                    <td><input  type="text" style="border: 0px"; name="spayName" > </td>
+                </tr>
+
+
+            </table>
+            <HR align=center width=600 color=#987cb9 SIZE=1>
+
+            <table>
+                <tr>
+                    <h3>费用结算</h3>
+                    <td>水费度数</td>
+                    <td>
+
+                        <input type="text" style="border: 0px"; name="water" > </td>
+                </tr>
+
+                <tr>
+                    <td>电费度数</td>
+                    <td><input type="text" style="border: 0px"; name="dian" > </td>
+                </tr>
+                <tr>
+                    <td>气费度数</td>
+                    <td><input type="text" style="border: 0px"; name="qi" > </td>
+                </tr>
+
+
+
+            </table>
+
+        </form>
+    </div>
+</div>
+
+<form id="LandlordFrom" method="post">
+    <select name="temp" id="sele">
+        <option value="1"> 姓名</option>
+        <option value="2"> 地址</option>
+    </select>
+    <input class="easyui-textbox" name = "renterName" id="textName" style="width:150px">
+    <input type="button" value="搜索" onclick="find()">
+</form>
+
+<table id="TenantTable"></table>
+
+
+</body>
+<script type="text/javascript" th:inline="none">
+    function find(){
+
+       $('#TenantTable').datagrid('load', myserialize($("#LandlordFrom")));
+    }
+    //拼接条件查询
+    function myserialize (obj) {
+        var o = {};
+        var a = obj.serializeArray();
+        $.each(a, function() {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        console.log(o);
+        return o;
+
+
+        };
+
+
+
+        $("#TenantTable").datagrid({
+            url: 'findTenantList',
+            toolbar: '#toolbars',
+            fit: true,//搜索
+            pagination: false, //是否展示分页
+            pageList: [2, 5, 10, 20],//分页组件
+            pageSize: 2,//默认每页条数
+            columns: [[
+
+                {field: 'renterName', title: '租客姓名'},
+                {field: 'renterLocation', title: '房源地址'},
+                {field: 'renterNumber', title: '房号'},
+                {field: 'startDate', title: '合同开始时间'},
+                {field: 'endData', title: '合同截止时间'},
+                {field:'234',title:'操作',formatter:function(value,row,index){
+                        return "<a href='javascript:updatecomments(\""+row.rid+"\")' >查看详情</a>"
+                    }}
+
+            ]]
+        })
+
+
+
+   //收起
+    function guanbitenantDialog(){
+        $("#tenantDialog").dialog('close')
+    }
+    //修改
+    function updatecomments(rid) {
+        $("#tenantDialog").dialog('open');
+        updatecomments2(rid);
+    }
+//回显
+
+    function updatecomments2(rid){
+        $.ajax({
+            url:'/findTenantListById',
+            type:'post',
+            data:{
+                rid:rid
+            },
+            dataType:'json',
+            success:function(data){
+                  alert(data.sidentity)
+               $("#commentsfrom").form('load',data);
+
+                $("#tenantDialog").dialog('open');
+            }
+        })
+
+        $("#tenantDialog").dialog({
+
+            iconCls:'icon-update',
+            closed:false
+        })
+    }
+
+
+
+</script>
+</html>
