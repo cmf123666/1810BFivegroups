@@ -38,6 +38,8 @@ public class UserServiceImpl implements UserService{
     /*新增人员表*/
     @Override
     public void saveUser(UserBean userBean) {
+        HashMap<String, Object> hashMap = new HashMap<>();
+
         userMapper.saveUser(userBean);
     }
     /*根据ID回显人员表*/

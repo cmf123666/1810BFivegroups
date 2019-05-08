@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>根据用户ID展示用户信息</title>
+    <title>展示用户信息</title>
     <link rel="stylesheet" href="/js/easyui-1.7.0/themes/metro/easyui.css">
     <link rel="stylesheet" href="/js/easyui-1.7.0/themes/icon.css">
     <script src="/js/easyui-1.7.0/jquery.min.js"></script>
@@ -14,7 +14,7 @@
 <div id="toolbar">
     <tr>
         <td>
-            <a class="easyui-linkbutton" onclick="addBtn()" data-options="iconCls:'icon-add',plain:true">新增</a>
+            <a class="easyui-linkbutton" onclick="addBtn()" data-options="iconCls:'icon-add',plain:true">添加子账号</a>
         </td>
     </tr>
 </div>
@@ -39,7 +39,7 @@
             fit:true,
             pagination:true,
             toolbar:'#toolbar',
-            pageSize:6,
+            pageSize:4,
             pageList:[2,4,6,8,10,20],
             singleSelect:true,//只允许选择一行
             idField:"id",//指明哪一个字段是标识字段一般用id

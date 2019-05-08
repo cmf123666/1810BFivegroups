@@ -14,13 +14,13 @@
     <table>
         <tr>
             <td>使用人</td>
-            <td><input type="text" class="easyui-textbox" name="userName" id="userNameId" th:value="${userBean?.userName}">
+            <td><input type="text" class="easyui-textbox" name="userName" id="userNameId" th:value="${userBean?.userName}" prompt="请输入使用人名称">
                 <input type="hidden" class="easyui-textbox" name="uid" th:value="${userBean?.uid}"><!--用于修改-->
             </td>
         </tr>
         <tr>
             <td>手机号</td>
-            <td><input type="text" class="easyui-textbox" name="phoneNumber" th:value="${userBean?.phoneNumber}"></td>
+            <td><input type="text" class="easyui-numberbox" name="phoneNumber" th:value="${userBean?.phoneNumber}" id="phoneNumberId" prompt="请输入手机号"></td>
         </tr>
         <tr>
             <td>职位类型</td>
@@ -32,7 +32,7 @@
         </tr>
         <tr>
             <td>密码</td>
-            <td><input type="password" class="easyui-passwordbox" name="userPassword" id="userPasswordId" th:value="${userBean?.userPassword}">
+            <td><input type="password" class="easyui-passwordbox" name="userPassword" id="userPasswordId" th:value="${userBean?.userPassword}" prompt="请输入密码" maxlength="18">
             </td>
         </tr>
         <tr>
@@ -44,17 +44,19 @@
 </form>
 </body>
 <script>
-
-
 /*人员表新增*/
 function saveUser(){
-    var textbox = $("#userNameId").textbox('getValue');/*用户名为空*/
-    var userPasswordId = $("#userPasswordId").textbox('getValue');/*密码为空*/
+    var textbox = $("#userNameId").textbox('getValue');/*判断用户名是否为空*/
+    var userPasswordId = $("#userPasswordId").textbox('getValue');/*判断密码是否为空*/
+    var phoneNumberId = $("#phoneNumberId").textbox('getValue');/*判断手机号是否为空*/
     if (textbox == null || textbox == ""){
         alert("操作失败！请输入使用人名称！");
         return "/addOrUpdateUser";
     }else if (userPasswordId ==null || userPasswordId ==""){
         alert("操作失败！请输入密码");
+        return "/addOrUpdateUser";
+    }else if (phoneNumberId ==null || phoneNumberId ==""){
+        alert("操作失败！请输入正确的手机号");
         return "/addOrUpdateUser";
     }
     $("#userForm").form('submit',{
