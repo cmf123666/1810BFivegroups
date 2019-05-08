@@ -50,11 +50,13 @@ public class LoginController {
             list.add(userBean.getUserId());
             ops.set(userBean.getUserId(),JSON.toJSONString(list));
 //判断超过一天可以重新登陆三次 60*60*24
-            ops.set(userBean.getUserId(),JSON.toJSONString(list),10, TimeUnit.SECONDS);
+            ops.set(userBean.getUserId(),JSON.toJSONString(list),30, TimeUnit.SECONDS);
             Long expire = redisTemplate.getExpire(userBean.getUserId());
             if (expire==0){
                 redisTemplate.delete(userBean.getUserId());
             }
+
+
             HttpSession session=request.getSession();
             session.setAttribute("user",userBean);
             return "登陆成功";
