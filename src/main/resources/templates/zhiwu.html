@@ -43,88 +43,14 @@
 <center><button   type="button" class="btn btn-SUCCESS" onclick="add()">新增</button></center>
 
            <table id="redisTab"></table>
+
 </body>
 <script type="text/javascript" >
-    /*
-    *发送ajax请求获取jsp页面内容
-    */
-    function getJspHtml(urlStr){
-        var  jspHtml = "";
-//	 async  (默认: true) 默认设置下，所有请求均为异步请求。如果需要发送同步请求，请将此选项设置为 false。
-//注意，同步请求将锁住浏览器，用户其它操作必须等待请求完成才可以执行。
-        $.ajax({
-            url:urlStr,
-            type:'post',
-            //同步的ajax
-            async:false,
-            success:function(data){
-                //alert(data);//data--addProduct.jsp页面内容
-                jspHtml = data;
-            },
-            error:function(){
-                bootbox.alert("ajax失败");
-            }
-        });
-        return jspHtml;
-    }
-
-
-    function  dialog(HTMLurl,submitUrl,title){
-
-        var dialog = bootbox.dialog({
-            title: title,
-            message: getJspHtml(HTMLurl),   //调用方法
-            buttons:{
-                "save":{
-                    label: '保存',
-                    //自定义样式
-                    className: "btn-success",
-                    callback: function() {
-                        $.ajax({
-                            url:submitUrl,
-                            type:'post',
-                            data:$("#logForm").serialize(),
-                            success:function(data){
-                                bootbox.alert("保存成功");
-                                $("#redisTab").bootstrapTable('refresh');
-                            },
-                            error:function(){
-                                bootbox.alert("ajax失败");
-                            }
-                        });
-                    }
-                },
-                "unSave":{
-                    label: '取消',
-                    //自定义样式
-                    className: "btn-info",
-                    callback: function() {
-                        // return false;  //dialog不关闭
-                    }
-                }
-            }
-        });
-    }
-
-    function editRedis(){
-        var id=	$("[name='chk']:checked");
-        alert(id);
-        if(id&&id.length==1){
-            dialog("<%=request.getContextPath()%>/event/findtor.do?id="+id[0].value,"<%=request.getContextPath()%>/event/addredis.do","新增新闻");
-        }else{
-            alert("请选择 一个")
-        }
-    }
-
+     /*跳转新增页面*/
      function add(){
          location.href="getzhifu";
      }
-    function  addRedis(){
-        //  复选框  ID
-        dialog("<%=request.getContextPath()%>/event/toredis.do","<%=request.getContextPath()%>/event/addredis.do","新增新闻");
-    }
-
-
+     /*展示*/
     $(function (){
         $("#redisTab").bootstrapTable({
             url:"findzhiwei",
@@ -145,9 +71,7 @@
             contentType:'application/x-www-form-urlencoded;charset=UTF-8',   //数据编码纯文本  offset=0&limit=5
             toolbar:'#tabToolBar',   //  工具定义位置
             columns:[
-                {field:'pid',title:'',width:50,
-
-                },
+                {field:'jjj',title:'',width:50,},
                 {field:'pname',title:'职位名称',width:100},
                 {field:'pdate',title:'创建时间',width:100,sortable:true},
                 {field:'xxx',title:'操作',
@@ -155,7 +79,6 @@
                         var str="<a href='javascript:update("+row.pid+")' class='easyui-linkbutton' iconCls:'icon-cancel'>修改</a>--<a href='javascript:del("+row.pid+")' class='easyui-linkbutton' iconCls:'icon-cancel'>删除</a>";
                         return str;
                 },
-
                     width:100,sortable:true},
             ],
             //传递参数（*）
@@ -187,31 +110,49 @@
     })
     function update(id){
         location.href="findzhiweis.do?id="+id;
+
     }
     function del(id){
-        $.ajax({
-            url:"delzhiwei",
-            data:{id:id},
-            type:"post",
-            success:function(data){
-                location.href="zhifu";
+        if ($("#myConfirm").length > 0) {
+            $("#myConfirm").remove();
+        }
+        var html = "<div class='modal fade' id='myConfirm' >"
+            + "<div class='modal-backdrop in' style='opacity:0; '></div>"
+            + "<div class='modal-dialog' style='z-index:2901; margin-top:60px; width:400px; '>"
+            + "<div class='modal-content'>"
+            + "<div class='modal-header'  style='font-size:16px; '>"
+            + "<span class='glyphicon glyphicon-envelope'>&nbsp;</span>信息!<button type='button' class='close' data-dismiss='modal'>"
+            + "<span style='font-size:20px;  ' class='glyphicon glyphicon-remove'></span><tton></div>"
+            + "<div class='modal-body text-center' id='myConfirmContent' style='font-size:18px; '>"
+            + "是否确定要删除？"
+            + "</div>"
+            + "<div class='modal-footer ' style=''>"
+            + "<button class='btn btn-danger ' id='confirmOk' >确定<tton>"
+            + "<button class='btn btn-info ' data-dismiss='modal'>取消<tton>"
+            + "</div>" + "</div></div></div>";
+        $("body").append(html);
 
-            },error:function(){
+        $("#myConfirm").modal("show");
 
-
-            }
-        })
-    }
-    function  search() {
-        $("#redisTab").bootstrapTable("refresh", {
-            "query": {
-                "userName": $("#userName").val(),
-                /* "minDate":$("#minTime").val(),
-                "maxDate":$("#maxTime").val(),
-                "minprice":$("#minprice").val(),
-                 "maxprice":$("#maxprice").val(), */
-            }
+        $("#confirmOk").on("click", function() {
+            $("#myConfirm").modal("hide");
+            $.ajax({
+                url:"delzhiwei",
+                data:{id:id},
+                type:"post",
+                success:function(data){
+                    location.href="zhifu";
+                     alert("删除成功")
+                },error:function(){
+                    alert("删除失败！\n" +
+                        "\n" +
+                        "还有账号在使用该权限\n" +
+                        "\n" +
+                        "请先将使用该权限的账号权限更改后重试")
+                }
+            })
         });
     }
+
 </script>
 </html>

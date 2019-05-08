@@ -16,16 +16,17 @@ import java.util.HashMap;
 public class CpController {
     @Resource
     CpService cpService;
-
+    /*跳转到职位配置页面*/
   @RequestMapping("zhifu")
     public String  zhifu(){
       return "zhiwu";
   }
-
+   /*跳转到新增修改页面*/
     @RequestMapping("getzhifu")
     public String  getzhifu(){
         return "zhifu";
     }
+    /*查询职位带分页*/
     @RequestMapping("findzhiwei")
     @ResponseBody
     public HashMap<String,Object> findzhiwei(Integer pageSize,Integer start){
@@ -34,14 +35,14 @@ public class CpController {
 
         return map;
     }
-
+    /*职位回显到页面*/
     @RequestMapping("findzhiweis")
     public String  findzhiweis(Integer id, Model model){
         Postbean Postbean=  cpService.findzhiweis(id);
         model.addAttribute("c",Postbean);
         return "zhifu";
     }
-
+    /*职位修改和新增*/
     @RequestMapping("addzhiwei")
     @ResponseBody
     public void addzhiwei(Postbean postbean){
@@ -53,6 +54,7 @@ public class CpController {
           cpService.addzhiwei(postbean);
       }
     }
+    /*职位删除*/
     @RequestMapping("delzhiwei")
     @ResponseBody
     public void delzhiwei(String id){
