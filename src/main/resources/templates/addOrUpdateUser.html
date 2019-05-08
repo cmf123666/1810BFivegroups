@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>添加修改人员页面</title>
+    <link rel="stylesheet" href="/js/easyui-1.7.0/themes/metro/easyui.css">
+    <link rel="stylesheet" href="/js/easyui-1.7.0/themes/icon.css">
+    <script src="/js/easyui-1.7.0/jquery.min.js"></script>
+    <script src="/js/easyui-1.7.0/jquery.easyui.min.js"></script>
+    <script src="/js/easyui-1.7.0/plugins/jquery.datagrid.js"></script>
+</head>
+<body>
+<form method="post" id="userForm">
+    <table>
+        <tr>
+            <td>使用人</td>
+            <td><input type="text" class="easyui-textbox" name="userName" id="userNameId" th:value="${userBean?.userName}" prompt="请输入使用人名称">
+                <input type="hidden" class="easyui-textbox" name="uid" th:value="${userBean?.uid}"><!--用于修改-->
+            </td>
+        </tr>
+        <tr>
+            <td>手机号</td>
+            <td><input type="text" class="easyui-numberbox" name="phoneNumber" th:value="${userBean?.phoneNumber}" id="phoneNumberId" prompt="请输入手机号"></td>
+        </tr>
+        <tr>
+            <td>职位类型</td>
+            <td><input type="text" class="easyui-combobox" name="postId" id="post" th:value="${userBean?.postId}"></td>
+        </tr>
+        <tr>
+            <td>账号</td>
+            <td><input type="text" class="easyui-textbox" name="userId" th:value="${userBean?.userId}"></td>
+        </tr>
+        <tr>
+            <td>密码</td>
+            <td><input type="password" class="easyui-passwordbox" name="userPassword" id="userPasswordId" th:value="${userBean?.userPassword}" prompt="请输入密码" maxlength="18">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <a class="easyui-linkbutton" onclick="saveUser()" data-options="iconCls:'icon-save'">保存</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+<script>
+/*人员表新增*/
+function saveUser(){
+    var textbox = $("#userNameId").textbox('getValue');/*判断用户名是否为空*/
+    var userPasswordId = $("#userPasswordId").textbox('getValue');/*判断密码是否为空*/
+    var phoneNumberId = $("#phoneNumberId").textbox('getValue');/*判断手机号是否为空*/
+    if (textbox == null || textbox == ""){
+        alert("操作失败！请输入使用人名称！");
+        return "/addOrUpdateUser";
+    }else if (userPasswordId ==null || userPasswordId ==""){
+        alert("操作失败！请输入密码");
+        return "/addOrUpdateUser";
+    }else if (phoneNumberId ==null || phoneNumberId ==""){
+        alert("操作失败！请输入正确的手机号");
+        return "/addOrUpdateUser";
+    }
+    $("#userForm").form('submit',{
+        url:'saveUserOrUpdate',
+        success:function(data){
+            if(data){
+                $.messager.alert('提示','保存成功','info');
+                location.href="/findUser";//跳转到查询页面
+            }else{
+                $.messager.alert('提示','保存失败','info');
+            }
+        }
+    })
+}
+    /*查询角色表*/
+    $(function(){
+        $("#post").combobox({
+            url:'/findPostList',
+            valueField:'pid',
+            textField:'pname'
+        })
+    })
+</script>
+</html>

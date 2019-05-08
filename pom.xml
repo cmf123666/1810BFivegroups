@@ -58,19 +58,6 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-        <!--mongoDB相关jar包-->
-        <!--mongoDB相关jar包-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-mongodb</artifactId>
-
-        </dependency>
-
         <!-- 数据库连接池 -->
         <dependency>
             <groupId>com.alibaba</groupId>
