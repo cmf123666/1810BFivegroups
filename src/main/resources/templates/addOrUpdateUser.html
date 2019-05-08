@@ -10,11 +10,12 @@
     <script src="/js/easyui-1.7.0/plugins/jquery.datagrid.js"></script>
 </head>
 <body>
-<form method="post" id="userForm">
+<form method="post" id="userForm" onsubmit="return sub()">
     <table>
         <tr>
             <td>使用人</td>
             <td><input type="text" class="easyui-textbox" name="userName" id="userNameId" th:value="${userBean?.userName}" prompt="请输入使用人名称">
+                <span id="a1"></span>
                 <input type="hidden" class="easyui-textbox" name="uid" th:value="${userBean?.uid}"><!--用于修改-->
             </td>
         </tr>
@@ -33,6 +34,7 @@
         <tr>
             <td>密码</td>
             <td><input type="password" class="easyui-passwordbox" name="userPassword" id="userPasswordId" th:value="${userBean?.userPassword}" prompt="请输入密码" maxlength="18">
+                <span id="a2"></span>
             </td>
         </tr>
         <tr>
@@ -44,6 +46,29 @@
 </form>
 </body>
 <script>
+    /*正则判断用户名和密码长度*/
+    function zhengze() {
+        /*用户名不超过8个汉字的正则*/
+        var userNameId = $("#userNameId").textbox('getValue');
+        var reg = /^[a-zA-Z\u4e00-\u9fa5]{0,8}$/;
+        if (!reg.test(userNameId)) {
+            alert("操作失败！使用人名称长度超过8个文字了")
+            return false;
+        }else{
+            return true;
+        }
+
+        /*密码*/
+        var userPasswordId=document.getElementById("userPasswordId");
+        var a2 =document.getElementById("a2");
+        var reg=/^[A-Z]{1}[A-Za-z0-9]{1,}$/;
+        if(!reg.test(userPasswordId.value)){
+            alert("操作失败！密码长度超过了18个字符");
+            return false;
+        }
+        return true;
+    }
+
 /*人员表新增*/
 function saveUser(){
     var textbox = $("#userNameId").textbox('getValue');/*判断用户名是否为空*/
@@ -51,7 +76,7 @@ function saveUser(){
     var phoneNumberId = $("#phoneNumberId").textbox('getValue');/*判断手机号是否为空*/
     if (textbox == null || textbox == ""){
         alert("操作失败！请输入使用人名称！");
-        return "/addOrUpdateUser";
+        return "/addOrUpdateUser";/*pagecontroller 的新增跳页面方法*/
     }else if (userPasswordId ==null || userPasswordId ==""){
         alert("操作失败！请输入密码");
         return "/addOrUpdateUser";
@@ -59,6 +84,7 @@ function saveUser(){
         alert("操作失败！请输入正确的手机号");
         return "/addOrUpdateUser";
     }
+    if(zhengze()){
     $("#userForm").form('submit',{
         url:'saveUserOrUpdate',
         success:function(data){
@@ -70,7 +96,11 @@ function saveUser(){
             }
         }
     })
+    }else{
+        alert("格式不对重新输入");
+    }
 }
+
     /*查询角色表*/
     $(function(){
         $("#post").combobox({
