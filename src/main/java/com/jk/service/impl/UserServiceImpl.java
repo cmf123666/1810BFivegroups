@@ -6,7 +6,7 @@ import com.jk.mapper.UserMapper;
 import com.jk.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,8 +39,8 @@ public class UserServiceImpl implements UserService {
     /*新增人员表*/
     @Override
     public void saveUser(UserBean userBean) {
-        HashMap<String, Object> hashMap = new HashMap<>();
-
+        HashMap<String,Object> mash = new HashMap<>();
+        userBean.setEndTime(new Date());
         userMapper.saveUser(userBean);
     }
     /*根据ID回显人员表*/
