@@ -1,7 +1,4 @@
 spring:
-  data:
-    mongodb:
-      uri: mongodb://192.168.88.133:27017/1810cc
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://192.168.1.123:3306/mayseven?useUnicode=true&characterEncoding=utf-8
@@ -12,14 +9,14 @@ spring:
   aop:
     auto: true
   ##\u6D88\u8D39\u8005
-  application:
-    name: servername
-  dubbo:
-    application:
-      name: user_consumer
-    registry:
-      address: zookeeper://192.168.1.123:2181
-    scan: com.jk.service
+ # application:
+ #   name: servername
+ # dubbo:
+ #   application:
+ #     name: user_consumer
+ #   registry:
+ #     address: zookeeper://192.168.1.123:2181
+ #   scan: com.jk.service
 
 mybatis:
   mapperLocations: classpath*:mybatis/mapper-*.xml
@@ -35,4 +32,4 @@ mybatis:
     timeout: 5000
 
 server:
-  port: 8081
+  port: 8082

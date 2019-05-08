@@ -1,13 +1,13 @@
-<script type="text/javascript" src="../js/my97/WdatePicker.js"></script>
+ï»¿<script type="text/javascript" src="../../js/my97/WdatePicker.js"></script>
 
 
-¿ªÊ¼<input class='Wdate' id="searchStartTime" type="text" style="width:160px" 
+ï¿½ï¿½Ê¼<input class='Wdate' id="searchStartTime" type="text" style="width:160px" 
                                onclick="WdatePicker({startDate:'%y-%M-%d %H:%m:%s',dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'searchEndTime\')}'})" />
-½áÊø<input class='Wdate' id="searchEndTime" type="text" style="width:160px" 
+ï¿½ï¿½ï¿½ï¿½<input class='Wdate' id="searchEndTime" type="text" style="width:160px" 
                                 onclick="WdatePicker({startDate:'%y-%M-%d %H:%m:%s',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'searchStartTime\')}'})" />
 
 
 
 
-<input class='Wdate' name="goods.createTime" type="text" style="width:160px" 
-				 			onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+<input class='Wdate' name="createTime" type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		

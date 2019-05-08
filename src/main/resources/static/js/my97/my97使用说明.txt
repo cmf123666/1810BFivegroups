@@ -1,0 +1,15 @@
+
+第一步   引入 js css 文件
+
+<link rel="stylesheet" href="my97/my97/skin/WdatePicker.css">
+<script src="my97/my97/WdatePicker.js"></script>
+
+
+第二步   input 格式
+
+<input class='Wdate' type="text" name="createTime" onclick="WdatePicker  ({dateFmt:'yyyy-MM-dd'})">
+
+
+注意：  class属性值 必须是  Wdate  ，， onclick  属性值必须是WdatePicker()方法，
+方法的参数代表要定义的时间格式。
+        后台不改变，name的属性值和后台要接受的属性名保持一致就可以

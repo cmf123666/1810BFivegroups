@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>清退</title>
+
+</head>
+<body>
+<div>
+    <from>
+        <input type="hidden" th:value="${l.lid}" id="hids">
+    </from>
+    房东信息
+    <table>
+        <tr>
+            <td>房东姓名:</td>
+            <td><span th:text="${l.landlordnName}"></span></td>
+        </tr>
+        <tr>
+            <td>房源地址:</td>
+            <td><span th:text="${l.listingAddress}"></span></td>
+        </tr>
+        <tr>
+            <td>合同起止时间:</td>
+            <td><span th:text="${l.startDate}"></span>至
+                <span th:text="${l.endDate}"></span></td>
+        </tr>
+        <tr>
+            <td>租金:</td>
+            <td>
+                <table>
+                    <tr>
+                        <td><span th:text="${l.houseRental}"></span>元/月</td>
+                        <td>押金:</td>
+                        <td><span id="houseDeposit" th:text="${l.houseDeposit}"></span>元</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    账单结算:
+    <table>
+        <tr>
+            <td>押金退还:</td>
+            <td><font size="6" color="#ff0000"><span th:text="${l.houseDeposit}"></span>元</font></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input class="easyui-textbox"  name = "" style="width:150px">&nbsp;&nbsp;&nbsp;&nbsp;
+                <input class="easyui-textbox"  id= "AmountSize" style="width:150px">&nbsp;&nbsp;&nbsp;&nbsp;
+                <select id="u100_input">
+                    <option value="1"> 退还房东</option>
+                    <option value="2"> 房东补款</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+        </tr>
+    </table>
+</div>
+<div>
+    <a href="javascript:addLandlord()" class="easyui-linkbutton" data-options="iconCls:'icon-add'" style="size: A4"></a>
+</div>
+    <div id="u102" class="text">
+        <p><span>合计：</span><span id="Sum">+<span th:text="${l.houseDeposit}"></span>元</span></p>
+    </div>
+<div>
+    <a href="javascript:removeLandlord()" class="easyui-linkbutton" data-options="iconCls:'icon-add'">确定退房</a>
+</div>
+<input type="hidden" style="width:150px">
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+<body xmlns:th="http://www.w3.org/1999/xhtml">
+  <div>
+      房东信息
+      <table>
+          <tr>
+              <td>房东姓名</td>
+              <td><span th:text="${l.landlordnName}"></span></td>
+              <td>联系方式</td>
+              <td><span th:text="${l.contactMethod}"></span></td>
+              <td>身份证号</td>
+              <td><span th:text="${l.numberCardID}"></span></td>
+          </tr>
+          <tr>
+              <td>紧急联系人</td>
+              <td><span th:text="${l.emergencyContact}"></span></td>
+              <td>联系方式</td>
+              <td><span th:text="${l.contactInformation}"></span></td>
+          </tr>
+      </table>
+  </div>
+   房源信息
+  <div>
+      <table>
+          <tr>
+              <td>房源位置</td>
+              <td><span th:text="${l.listingAddress}"></span></td>
+          </tr>
+          <tr>
+              <td>房源建筑面积</td>
+              <td><span th:text="${l.floorage}"></span></td>
+          </tr>
+          <tr>
+              <td>房源户型</td>
+              <td><span th:text="${l.housingType}"></span></td>
+          </tr>
+          <tr>
+              <td>房源状况</td>
+              <td><span th:text="${l.housingSituation}"></span></td>
+          </tr>
+      </table>
+  </div>
+  <div>
+      合同信息
+      <table>
+          <tr>
+              <td>合同起止时间</td>
+              <td><span th:text="${l.startDate}"></span>至
+                  <span th:text="${l.endDate}"></span></td>
+              <td colspan="2"></td>
+          </tr>
+          <tr>
+              <td>房租支付方式</td>
+              <td><span th:text="${l.paymentWay}"></span></td>
+              <td>押金</td>
+              <td><span th:text="${l.houseDeposit}"></span></td>
+          </tr>
+      </table>
+  </div>
+  <div>
+      合同分阶情况
+      <table>
+          <tr>
+              <td>第一阶起止时间</td>
+              <td><span th:text="${l.firstStartDate}"></span>
+                  <span th:text="${l.firstEndDate}"></span></td>
+              <td>租金</td>
+              <td><span th:text="${l.firstHouseRental}"></span></td>
+          </tr>
+          <tr>
+              <td>第二阶起止时间</td>
+              <td><span th:text="${l.secondStartDate}"></span>
+                  <span th:text="${l.secondEndDate}"></span></td>
+              <td>租金</td>
+              <td><span th:text="${l.secondHouseRental}"></span></td>
+          </tr>
+      </table>
+  </div>
+  <div>
+      费用结算
+      <table>
+          <tr>
+              <td>水表度数</td>
+              <td><span th:text="${l.landlordnName}"></span></td>
+              <td>电表读数</td>
+              <td><span th:text="${l.landlordnName}"></span></td>
+              <td>气表度数</td>
+              <td><span th:text="${l.landlordnName}"></span></td>
+          </tr>
+          <tr>
+              <td>物业费</td>
+              <td><span th:text="${l.landlordnName}"></span></td>
+          </tr>
+      </table>
+  </div>
+    <div>
+        备注:<br/>
+        <span th:value="${l.landlordnName}"></span>
+    </div>
+
+</body>
+
+
+
