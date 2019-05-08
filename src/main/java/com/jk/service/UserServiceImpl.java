@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService{
     /*新增人员表*/
     @Override
     public void saveUser(UserBean userBean) {
+        HashMap<String,Object> mash = new HashMap<>();
         userBean.setEndTime(new Date());
         userMapper.saveUser(userBean);
     }
