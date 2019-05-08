@@ -20,6 +20,6 @@ public class UserBean implements Serializable {
         private String zhiId;//关联的是支付房东的id，对应房东表
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
-        private Date lastDate;
+        private Date endTime;
         private String userName;//使用人
 }
