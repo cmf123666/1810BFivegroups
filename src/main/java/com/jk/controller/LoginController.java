@@ -35,11 +35,10 @@ public class LoginController {
         UserBean user=loginService.login(userBean);
         if (user!=null){
             //登陆成功修改最后登陆时间
-
             user.setEndTime(new Date());
             loginService.updLastDate(user);
 
-            //设置一个账号一天只能登陆三次
+//设置一个账号一天只能登陆三次
             ValueOperations ops = redisTemplate.opsForValue();
             List<String> list=new ArrayList<>();
             if (ops.get(userBean.getUserId())!=null){
@@ -50,14 +49,12 @@ public class LoginController {
             }
             list.add(userBean.getUserId());
             ops.set(userBean.getUserId(),JSON.toJSONString(list));
-
-            //判断超过一天可以重新登陆三次
+//判断超过一天可以重新登陆三次 60*60*24
             ops.set(userBean.getUserId(),JSON.toJSONString(list),10, TimeUnit.SECONDS);
             Long expire = redisTemplate.getExpire(userBean.getUserId());
             if (expire==0){
                 redisTemplate.delete(userBean.getUserId());
             }
-
             HttpSession session=request.getSession();
             session.setAttribute("user",userBean);
             return "登陆成功";
@@ -74,7 +71,7 @@ public class LoginController {
             String str=loginService.getCode(phoneNumber);
             HttpSession session = request.getSession();
             session.setAttribute("code",str);
-            session.setMaxInactiveInterval(10);
+            session.setMaxInactiveInterval(60);
             return str;
         }
         return "请输入正确的手机号";
