@@ -2,22 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jk.mapper.TenantDao">
-    <select  parameterType="string" id="findTenantListById" resultType="com.jk.bean.RenterBean">
+   <select  parameterType="string" id="findTenantListById" resultType="com.jk.bean.RenterBean">
  SELECT a.*,c.payName as spayName ,b.identity as sidentity ,b.phone as sphone,b.rent as srent,b.urgencyPhone as surgencyPhone,b.yajin as syajin  FROM mayrenter  a
            LEFT JOIN  mayrenter2  b ON a.RenterId=b.rids
           LEFT JOIN  maypay c ON a.mayId=c.pid
             where a.rid =#{value}
     </select>
 
-    <select  id="findTenantList"  resultType="com.jk.bean.RenterBean">
-        select *  from mayrenter  where 1=1
-        <if test="temp==1">
-            and  renterName like '%${renterName}%'
-        </if>
-        <if test="temp==2">
-            and  renterLocation like  '%${renterName}%'
-        </if>
+    <select id="findTenantCount"  resultType="int" parameterType="map">
+        select count(*)  from mayrenter s
+      <include refid="mysql"></include>
 
     </select>
+
+
+    <select  id="findTenantList"  resultType="com.jk.bean.RenterBean" parameterType="map" >
+        select *  from mayrenter s
+
+          <include refid="mysql"></include>
+
+        limit #{start},#{rows}
+
+    </select>
+   <sql id="mysql">
+         <where>
+
+             <if test="renterBean.temp==1">
+                 and  s.renterName like '%${renterBean.renterName}%'
+             </if>
+             <if test="renterBean.temp==2">
+                 and  s.renterLocation like  '%${renterBean.renterName}%'
+             </if>
+         </where>
+
+    </sql>
 
 </mapper>

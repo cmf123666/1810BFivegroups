@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>房东合同</title>
+    <link rel="stylesheet" href="/js/easyui-1.7.0/themes/metro/easyui.css">
+    <link rel="stylesheet" href="/js/easyui-1.7.0/themes/icon.css">
+    <script src="/js/easyui-1.7.0/jquery.min.js"></script>
+    <script src="/js/easyui-1.7.0/jquery.easyui.min.js"></script>
+    <script src="/js/easyui-1.7.0/plugins/jquery.datagrid.js"></script>
+</head>
+<body class="easyui-layout">
+<form id="LandlordFrom" method="post">
+    <select name="temp">
+        <option value=" 1"> 业主姓名</option>
+        <option value=" 2"> 房源地址</option>
+    </select>
+    <input class="easyui-textbox" name = "landlordnName" style="width:150px">
+    <input type="button" value="搜索" onclick="find()">
+</form>
+
+<!--datagrid 开始  -->
+<table id="dg"></table>
+<!--datagrid 结束 -->
+<!--Dialog 开始  -->
+<div id="Perfect"></div>
+<div id="Cleared"></div>
+</body>
+<script type="text/javascript" th:inline="none">
+    $(function(){
+        findLandlord();
+    })
+    function find(){
+        $('#dg').datagrid('load', myserialize($("#LandlordFrom")));
+    }
+    //拼接条件查询
+    function myserialize (obj) {
+        var o = {};
+        var a = obj.serializeArray();
+        $.each(a, function() {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        console.log(o);
+        return o;
+    };
+
+    findLandlord = function(){
+        $('#dg').datagrid({
+            url:'findLandlord',
+            columns:[[
+                /* field 属性值和 对象的属性名保持一致 */
+                {field:'xxx',title:'',checkbox:true,width:$(this).width() * 0.1},
+                {field:'landlordnName',title:'业主姓名',width:$(this).width() * 0.1},
+                {field:'listingAddress',title:'房源地址',width:$(this).width() * 0.1},
+                {field:'startDate',title:'合同开始时间',width:$(this).width() * 0.1},
+                {field:'endDate',title:'合同截至时间',width:$(this).width() * 0.1},
+                {field:'status',title:'状态',formatter: function(value,row,index){
+                        var str ="";
+                        if(row.status == 1){
+                            str = "正常";
+                        }
+                        if(row.status == 2){
+                            str = "已过期";
+                        }
+                        if(row.status == 3){
+                            str = "待完善";
+                        }
+                        return str;
+                    },width:$(this).width() * 0.1},
+                {field:'xxxx',title:'操作', formatter: function(value,row,index){
+                        var content = "";
+                        if(row.status == 1){
+                            content = "<a href='javascript:Perfect("+row.lid+","+row.status+","+row.contractMethod+")' class='easyui-linkbutton' iconCls:'icon-cancel'>查看详情</a>";
+                        }
+                        if(row.status == 3){
+                            content = "<a href='javascript:Perfect("+row.lid+","+row.status+","+row.contractMethod+")' class='easyui-linkbutton' iconCls:'icon-cancel'>完善信息</a>";
+                        }
+
+                        return content;
+                    },width:$(this).width() * 0.1}
+            ]],
+            /* 显示分页工具栏 */
+            pagination:true,
+            /* pageSize 必须和 pagelist 一起连用并且 pagesize的值是pagelist中其中一个 */
+            pageSize:2,
+            pageList:[2,4,6,8]
+        });
+    }
+    Perfect = function(id,status,contractMethod){
+        $('#Perfect').dialog({
+            title: 'PerfectAndViewDetails',
+            width: 600,
+            height: 500,
+            closed: false,
+            cache: false,
+            href: 'PerfectAndViewDetails?id='+id+'&status='+status+'&contractMethod='+contractMethod,
+            modal: true,
+            buttons:[{
+                text:'保存',
+                handler:function(){
+                    $('#detailsForm').form('submit', {
+                        url:"addDetailsForm",
+                        onSubmit: function(){
+                            // 用来提交前的判断
+                        },
+                        success:function(data){
+                            // 回调函数
+                            //清楚form 表单的缓存
+                            $("#detailsForm").form("clear");
+                            $('#dg').datagrid('reload');
+                            $('#Perfect').dialog("close");
+                        }
+                    });
+                }
+            },{
+                text:'关闭',
+                handler:function(){
+                    $('#Perfect').dialog("close");
+                }
+            },{
+                text:'清退',
+                handler:function(){
+                    cleared(id,contractMethod);
+                }
+            }]
+        });
+    }
+    function cleared(id,contractMethod){
+        $('#Perfect').dialog("close");
+        $('#Cleared').dialog({
+            title: 'cleared',
+            width: 600,
+            height: 500,
+            closed: false,
+            cache: false,
+            href: 'cleared?id='+id+'&contractMethod='+contractMethod,
+            modal: true,
+            buttons:[{
+                text:'关闭',
+                handler:function(){
+                    $('#Cleared').dialog("close");
+                }
+            }]
+        });
+    }
+    function ModifyContract(i) {
+        if(i==1){
+            var str = '<div>\n' +
+                '  合同信息\n' +
+                '  <table>\n' +
+                '      <tr>\n' +
+                '          <td>合同方式</td>\n' +
+                '          <td>\n' +
+                '              <select name="contractMethod"  onchange="ModifyContract(this.value)">\n' +
+                '                  <option value="1" selected>正常合同\n' +
+                '                  <option value="2">分阶合同\n' +
+                '              </select>\n' +
+                '          </td>\n' +
+                '      </tr>\n' +
+                '      <tr>\n' +
+                '          <td>开始时间</td>\n' +
+                '          <td><input name = "startDate" type="text" class="easyui-datebox" required="required"></input></td>\n' +
+                '          <td>结束时间</td>\n' +
+                '          <td><input name = "endDate" type="text" class="easyui-datebox" required="required"></input></td>\n' +
+                '      </tr>\n' +
+                '      <tr>\n' +
+                '          <td>房租支付方式</td>\n' +
+                '          <td>\n' +
+                '              <input class="easyui-textbox"  name = "paymentWay" style="width:150px">\n' +
+                '          </td>\n' +
+                '      </tr>\n' +
+                '      <tr>\n' +
+                '          <td>房屋租金</td>\n' +
+                '          <td><input class="easyui-textbox"  name = "houseRental" style="width:150px"></td>\n' +
+                '      </tr>\n' +
+                '      <tr>\n' +
+                '          <td>房屋押金</td>\n' +
+                '          <td><input class="easyui-textbox"  name = "houseDeposit" style="width:150px"></td>\n' +
+                '      </tr>\n' +
+                '  </table>\n' +
+                '    </div>';
+            $("#ModifyContra").html(str);
+        }
+        if(i==2){
+            var str ='<div>\n' +
+                '     合同信息:\n' +
+                '     <table>\n' +
+                '         <tr>\n' +
+                '             <td>合同方式</td>\n' +
+                '             <td>\n' +
+                '                 <select name="contractMethod" onchange="ModifyContract(this.value)">\n' +
+                '                     <option value="1" >正常合同\n' +
+                '                     <option value="2" selected>分阶合同\n' +
+                '                 </select>\n' +
+                '             </td>\n' +
+                '         </tr>\n' +
+                '         <tr>\n' +
+                '         <tr>\n' +
+                '             <td>房租支付方式</td>\n' +
+                '             <td>\n' +
+                '                 <input class="easyui-textbox"  name = "paymentWay" style="width:150px">\n' +
+                '             </td>\n' +
+                '         </tr>\n' +
+                '         </tr>\n' +
+                '         <tr>\n' +
+                '             <td>房屋押金</td>\n' +
+                '             <td><input class="easyui-textbox"  name = "houseDeposit" style="width:150px"></td>\n' +
+                '         </tr>\n' +
+                '     </table>\n' +
+                ' </div>\n' +
+                ' <div>\n' +
+                '     合同分阶情况:\n' +
+                '     <table>\n' +
+                '         <tr>\n' +
+                '             <td>第一阶段开始时间</td>\n' +
+                '             <td><input name = "firstStartDate" type="text" class="easyui-datebox" required="required"></input></td>\n' +
+                '             <td>第一阶段结束时间</td>\n' +
+                '             <td><input name = "firstEndDate" type="text" class="easyui-datebox" required="required"></input></td>\n' +
+                '         </tr>\n' +
+                '         <tr>\n' +
+                '             <td>房屋租金</td>\n' +
+                '             <td><input class="easyui-textbox"  name = "firstHouseRental" style="width:150px"></td>\n' +
+                '         </tr>\n' +
+                '     </table><br/><br/><br/>\n' +
+                '     <table>\n' +
+                '         <tr>\n' +
+                '             <td>第二阶段开始时间</td>\n' +
+                '             <td><input name = "secondStartDate" type="text" class="easyui-datebox" required="required"></input></td>\n' +
+                '             <td>第二阶段结束时间</td>\n' +
+                '             <td><input name = "secondEndDate" type="text" class="easyui-datebox" required="required"></input></td>\n' +
+                '         </tr>\n' +
+                '         <tr>\n' +
+                '             <td>房屋租金</td>\n' +
+                '             <td><input class="easyui-textbox"  name = "secondHouseRental" style="width:150px"></td>\n' +
+                '         </tr>\n' +
+                '     </table>\n' +
+                ' </div>';
+            $("#ModifyContra").html(str);
+        }
+    }
+</script>
+<script>
+    addLandlord = function(){
+        if($("#u100_input").val()==1){
+            var  i = 0;
+            i = $("#houseDeposit").text();
+            var  o = 0;
+            o  = $("#AmountSize").textbox("getValue");
+            var c = i*1-o*1;
+            $("#Sum").html("+"+c+"元");
+        }if($("#u100_input").val()==2){
+            var  i = 0;
+            i = $("#houseDeposit").text();
+            var  o = 0;
+            o  = $("#AmountSize").textbox("getValue");
+            var c = i*1+o*1;
+            $("#Sum").html("+"+c+"元");
+        }
+    }
+    removeLandlord = function(){
+        var id = $("#hids").val();
+        $.ajax({
+            url:"removeLandlord",
+            type:"post",
+            data:{id:id},
+            success:function(data){
+                $('#dg').datagrid('reload');
+            },
+            error:function(){
+            }
+        })
+    }
+</script>
+
+</html>

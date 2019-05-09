@@ -21,4 +21,10 @@ public class LiushuiBean implements Serializable {
          private Date  payDate;//
          private String status;
          private String num;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    private Date  startDate;//选择开始时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    private Date  endDate;//选择结束时间
 }

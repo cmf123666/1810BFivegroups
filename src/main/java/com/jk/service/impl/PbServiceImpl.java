@@ -7,6 +7,8 @@ import com.jk.service.PbService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,5 +35,38 @@ public class PbServiceImpl implements PbService {
         map.put("total",count);
         map.put("rows",list);
         return map;
+    }
+
+    @Override
+    public void delete(Integer rid) {
+        pbMapper.delete(rid);
+    }
+
+    @Override
+    public void add(String renterlocation, Integer rid, String renterNumber, String renterName, Integer billCount, Integer billType, String payDate, Integer payType) {
+        pbMapper.add(renterlocation,renterNumber,renterName,billCount,billType,payDate,payType);
+    }
+
+   @Override
+    public HashMap<String, Object> query2(Integer page, Integer rows, LiushuiBean liushuiBean) {
+        int count = pbMapper.getcount(liushuiBean);
+        List<LiushuiBean> list = pbMapper.query2((page-1)*rows,rows,liushuiBean);
+        HashMap<String, Object> hashmap = new HashMap<>();
+        hashmap.put("total",count);
+        hashmap.put("rows",list);
+        return hashmap;
+    }
+
+    @Override
+    public void addliushui(LiushuiBean liushuiBean) {
+
+        pbMapper.addliushui(liushuiBean);
+    }
+
+    @Override
+    public LiushuiBean theMost(String lid) {
+        LiushuiBean liushuiBean = pbMapper.theMost(lid);
+        System.out.println();
+        return  liushuiBean;
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -21,8 +22,9 @@ public class TenantController {
   //查询租客 --页面展示
   @RequestMapping("findTenantList")
   @ResponseBody
-  public List<RenterBean>findTenantList(RenterBean renterBean){
-    return  tenantService.findTenantList(renterBean);
+  public HashMap<String, Object>findTenantList(Integer page, Integer rows, RenterBean renterBean){
+
+    return  tenantService.findTenantList(page,rows,renterBean);
   }
 
 

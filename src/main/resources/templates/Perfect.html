@@ -1,0 +1,45 @@
+<body xmlns:th="http://www.w3.org/1999/xhtml">
+<form id="detailsForm">
+    <input type="hidden" name="lanId" th:value="${l.lid}">
+<div id="ModifyContra">
+    <div>
+      合同信息
+      <table>
+          <tr>
+              <td>合同方式</td>
+              <td>
+                  <select name="contractMethod"  onchange="ModifyContract(this.value)">
+                      <option value="1" selected>正常合同
+                      <option value="2">分阶合同
+                  </select>
+              </td>
+          </tr>
+          <tr>
+              <td>开始时间</td>
+              <td>
+                  <input name = "startDate" type="text" class="easyui-datebox" required="required"></input>
+              </td>
+              <td>结束时间</td>
+              <td>
+                  <input name = "endDate" type="text" class="easyui-datebox" required="required"></input>
+              </td>
+          </tr>
+          <tr>
+              <td>房租支付方式</td>
+              <td>
+                  <input class="easyui-textbox"  name = "paymentWay" style="width:150px">
+              </td>
+          </tr>
+          <tr>
+              <td>房屋租金</td>
+              <td><input class="easyui-textbox"  name = "houseRental" style="width:150px"></td>
+          </tr>
+          <tr>
+              <td>房屋押金</td>
+              <td><input class="easyui-textbox"  name = "houseDeposit" style="width:150px"></td>
+          </tr>
+      </table>
+    </div>
+</div>
+</form>
+</body>

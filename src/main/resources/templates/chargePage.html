@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/jdbc">
+<head>
+    <meta charset="UTF-8">
+    <title>收支流水</title>
+    <script src="/js/jquery-1.8.0.js"></script>
+    <script type="text/javascript" src="js/my97/WdatePicker.js"></script>
+    <link rel="stylesheet" href="/js/easyui-1.7.0/themes/metro/easyui.css">
+    <link rel="stylesheet" href="/js/easyui-1.7.0/themes/icon.css">
+    <script src="/js/easyui-1.7.0/jquery.min.js"></script>
+    <script src="/js/easyui-1.7.0/jquery.easyui.min.js"></script>
+    <script src="/js/easyui-1.7.0/plugins/jquery.datagrid.js"></script>
+</head>
+<body>
+<!--//新增按钮-->
+<input type="button" value="新增" onclick="addPage()">
+
+<form id="pro_from" >
+    <div>
+        <label>日期</label>
+        <input name="startDate" id="minTime" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'maxTime\')}'})" />至
+        <input name="endDate" id="maxTime" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'minTime\')}'})" /><br/>
+    </div>
+    <br>
+    <button type="button" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="search()">搜索</button>
+    <button type="button" class="easyui-linkbutton" data-options="iconCls:'icon-no'" onclick="reset()">重置</button>
+</form>
+<table id="dg"></table>
+
+<!--新增的弹框-->
+<div id="addDialog" class="easyui-dialog" title="账单信息" style="width:480px;height:330px;"
+     data-options="iconCls:'icon-save',resizable:true,modal:true">
+    <form id="addff" method="post">
+
+    账单所属： <input class="easyui-textbox" name="liushuiRoom"  style="width:130px" >
+       账单金额： <input class="easyui-textbox" name="payCount" id="zhangdanId" style="width:130px" onblur = "jine()" >
+       实付金额：  <input class="easyui-textbox" id="payCount"   style="width:130px" >
+       预计付款时间：
+        <input class="easyui-datebox" name="payDate" data-options="formatter:myformatter,parser:myparser"></input>
+      <!--  <input  name="payDate"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>-->
+      资金流向：<select  class="easyui-combobox" name="status" style="width:130px;">
+      <option value="1">收入</option>
+      <option value="2">支出</option>
+</select>
+      付款/收款方： <input class="easyui-textbox" name="liushuiName"  style="width:130px" >
+      账单类型：<select  class="easyui-combobox" name="billType" style="width:130px;">
+    <option value="1">租金</option>
+    <option value="2">押金</option>
+    <option value="3">电费</option>
+    <option value="4">气费</option>
+    <option value="5">物业费</option>
+</select>
+        <HR align=center width=1300 color=#987cb9 SIZE=2>
+
+    支付方式：<select  class="easyui-combobox" name="payType" style="width:130px;">
+    <option value="1">现金</option>
+    <option value="2">支付宝</option>
+    <option value="3">微信支付</option>
+    <option value="4">转账</option>
+</select>
+    支付时间：
+      <!--  <input  name="payDate"  onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>-->
+        <input class="easyui-datebox" name="payDate" data-options="formatter:myformatter,parser:myparser"></input>
+    备注：<input class="easyui-textbox" data-options="multiline:true" value=" " style="width:380px;height:120px">
+        <a id="btn" href="javascript:add()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">确认</a>
+        <a id="btn" href="javascript:rollbill()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+
+        <br> <br> <br> <br>
+   </form>  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
+</div>
+
+<!--更多的弹框-->
+<div id="mostdialog" class="easyui-dialog" title="账单信息" style="width:480px;height:330px;"
+     data-options="iconCls:'icon-save',resizable:true,modal:true">
+    <form id="mostff" method="post">
+        账单所属： <input id="aa" class="easyui-textbox" name="liushuiRoom"  style="width:130px"   >
+        账单金额： <input class="easyui-textbox" name="payCount" id="zhangdanId" style="width:130px"  >
+        实付金额：  <input class="easyui-textbox" id="payCount"   style="width:130px" >
+        预计付款时间：
+        <input class="easyui-datebox" name="payDate" data-options="formatter:myformatter,parser:myparser"></input>
+        资金流向：<select  class="easyui-combobox" name="status" style="width:130px;">
+        <option value="1" th:value="${l?.status==1?'selected':''}">收入</option>
+        <option value="2" th:value="${l?.status==2?'selected':''}">支出</option>
+    </select>
+        付款/收款方： <input class="easyui-textbox" name="liushuiName"  style="width:130px" >
+        账单类型：<select  class="easyui-combobox" name="billType" style="width:130px;">
+        <option value="1"  th:value="${l?.billType==1?'selected':''}">租金</option>
+        <option value="2" th:value="${l?.billType==2?'selected':''}">押金</option>
+        <option value="3" th:value="${l?.billType==3?'selected':''}">电费</option>
+        <option value="4" th:value="${l?.billType==4?'selected':''}">气费</option>
+        <option value="5" th:value="${l?.billType==5?'selected':''}">物业费</option>
+    </select>
+        <HR align=center width=1300 color=#987cb9 SIZE=2>
+
+        支付方式：<select  class="easyui-combobox" name="payType" style="width:130px;">
+        <option value="1" th:value="${l?.payType==1?'selected':''}">现金</option>
+        <option value="2" th:value="${l?.payType==2?'selected':''}">支付宝</option>
+        <option value="3" th:value="${l?.payType==3?'selected':''}">微信支付</option>
+        <option value="4" th:value="${l?.payType==4?'selected':''}">转账</option>
+    </select>
+        支付时间：
+        <!--<input class='Wdate' name="payDate" type="text" style="width:160px"
+               onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />-->
+        <input class="easyui-datebox" name="payDate" data-options="formatter:myformatter,parser:myparser"></input>
+
+        备注：<input class="easyui-textbox" data-options="multiline:true" value=" " style="width:380px;height:120px">
+        <br> <br> <br> <br>
+        &nbsp;</form>  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <a id="btn" href="javascript:guanbi()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">确认</a>
+    <a id="btn" href="javascript:rollbill()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+
+</div>
+
+
+
+
+  <script type="text/javascript" th:inline="none">
+      $(function(){
+          query();
+          $("#addDialog").dialog("close");
+          $("#more").dialog("close");
+          $("#mostdialog").dialog("close");
+
+      })
+      function myformatter(date){
+          var y = date.getFullYear();
+          var m = date.getMonth()+1;
+          var d = date.getDate();
+          return y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
+      }
+      function myparser(s){
+          if (!s) return new Date();
+          var ss = (s.split('-'));
+          var y = parseInt(ss[0],10);
+          var m = parseInt(ss[1],10);
+          var d = parseInt(ss[2],10);
+          if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
+              return new Date(y,m-1,d);
+          } else {
+              return new Date();
+          }
+      }
+
+
+      /*查询方法*/
+      function query(){
+          $('#dg').datagrid({
+              url:'query2',
+              toolbar:'#tb',
+              singleSelect:true,
+              columns:[[
+                  {field:'liushuiId',title:'ID',width:100,hidden:true},
+                  {field:'liushuiName',title:'收款/付款方',width:100},
+                  {field:'liushuiRoom',title:'账单房间',width:100,hidden:true},
+
+                  {field:'payCount',title:'账单金额',formatter:function(value,row,index){
+                           var str = "";
+                          if(row.status ==1){
+                             str= "<font color='green'>-"+value+"</font>"
+                          }else{
+                              str= "<font color='red'>+"+value+"</font>"
+                          }
+                      return str;
+                      }},
+                  {field:'billType',title:'账单类型',width:100},
+                  {field:'payType',title:'支付类型',width:100,align:'right'},
+                  {field:'billType',title:'账单类型',width:100,align:'right'},
+                  {field:'payDate',title:'预计付款时间',width:100,align:'right'},
+                  {field:'billType',title:'账单类型',width:100,align:'right'},
+                  {field:'payDate',title:'预计付款时间',width:100,align:'right'},
+                  {field:'xxx',title:'更多',formatter:function(value,row,index) {
+                           var str="<a href='javascript:theMost("+row.liushuiId+")'>更多信息</a>>"
+
+                             return str;
+                           },
+                            width:100,align:'right'}/*,
+                  {field:'xxxx',title:'操作', formatter: function(value,row,index){
+                           var content = "<a href='javascript:comfirmBill(&quot;"+row.renterlocation+"&quot;,"+
+                               row.renterNumber+",&quot;"+row.renterName+"&quot;,"+row.billCount+","+row.billType+
+                               ",&quot;"+row.payDate+"&quot;,"+
+                               ")' class='easyui-linkbutton' iconCls:'icon-cancel'>确认收款</a>";
+
+                           content += " |  <a href='javascript:more(&quot;"+row.renterlocation+"&quot;,"+row.rid+
+                               ","+row.renterNumber+",&quot;"+row.renterName+"&quot;,"+row.billCount+","+row.billType+",&quot;"
+                               +row.startDate+"&quot;,&quot;"+row.endData+"&quot;,&quot;"+row.payDate+"&quot;,"+
+                               ")' class='easyui-linkbutton' iconCls='icon-search'>更多</a>";
+                           return content;
+                       },width:$(this).width() * 0.1}*/
+              ]],
+              pagination:true,
+              pageSize:5,
+              pageList:[1,2,3,4,5]
+          });
+      }
+   function addPage() {
+       $("#addDialog").dialog("open");
+   }
+      function add(){
+          $('#addff').form('submit', {
+              url: "addliushui",
+              onSubmit: function () {
+              },
+              success: function (data) {
+                  // 回调函数
+                  alert("成功");
+                  //关闭dialog
+                  $("#addDialog").dialog("close");
+                  //刷新数据
+                  $("#dg").datagrid("reload");
+                  //清楚form 表单的缓存
+                  $("#addff").form("clear");
+              }
+          });
+      }
+
+    function theMost(lid){
+
+        $.ajax({
+            url:"theMost",
+            type:"POST",
+            data:{lid:lid},
+            success:function(result) {
+
+                //打开   dialog
+                $("#mostdialog").dialog("open");
+
+                //读取记录填充到表单中
+                $('#mostff').form('load', result);
+            },
+
+            error:function(){
+                alert("ajax访问失败了,查看控制台");
+            }
+        });
+
+
+    }
+
+
+
+      function search(){
+          $('#dg').datagrid('load',{
+              startDate:$("#minTime").val(),
+              endDate:$("#maxTime").val(),
+
+
+          });
+
+
+      }
+
+  function jine() {
+              var str  =  $("#zhangdanId").textbox('getValue');
+              alert(str);
+              $("#payCount").textbox('setValue',str);
+
+
+  }
+   function guanbi(){
+
+
+       $("#mostdialog").dialog("close");
+
+   }
+
+
+
+
+
+
+  </script>
+
+</body>
+</html>

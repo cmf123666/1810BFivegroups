@@ -1,12 +1,11 @@
 package com.jk.service;
 
 import com.jk.bean.RenterBean;
-import com.jk.bean.payType;
 
-import java.util.List;
+import java.util.HashMap;
 
 public interface TenantService {
-    List<RenterBean> findTenantList(RenterBean renterBean);
+    HashMap<String, Object> findTenantList(Integer page, Integer rows, RenterBean renterBean);
 
     RenterBean findTenantListById(String rid);
 

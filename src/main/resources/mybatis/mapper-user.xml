@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.jk.dao.UserMapper">
+<mapper namespace="com.jk.mapper.UserMapper">
   <!--用户表查询分页-->
     <select id="findUserList" parameterType="map" resultType="com.jk.bean.UserBean">
      select mu.uid,mu.endTime,mu.userName,mu.userId,mu.phoneNumber,mu.postId,

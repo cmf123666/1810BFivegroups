@@ -30,19 +30,19 @@ buttons:[{
                     <h3>租客信息</h3>
                     <td>租客姓名</td>
                     <td>
-                        <input type="text" style="border: 0px";  name="renterName" > </td>
+                        <input type="text" style="border: 0px";  name="renterName" readOnly="true" > </td>
                 </tr>
                 <tr>
                     <td>身份证号码</td>
-                    <td><input type="text" style="border: 0px"; name="sidentity" > </td>
+                    <td><input type="text" style="border: 0px"; name="sidentity" readOnly="true"> </td>
                 </tr>
                 <tr>
                     <td>紧急联系人</td>
-                    <td><input type="text" style="border: 0px"; name="surgencyPhone" > </td>
+                    <td><input type="text" style="border: 0px"; name="surgencyPhone" readOnly="true"> </td>
                 </tr>
                 <tr>
                     <td>联系方式</td>
-                    <td><input type="text" style="border: 0px"; name="sphone" > </td>
+                    <td><input type="text" style="border: 0px"; name="sphone" readOnly="true"> </td>
                 </tr>
 
 
@@ -53,25 +53,25 @@ buttons:[{
                     <h3>合同信息</h3>
                     <td>入住房间</td>
                     <td>
-                        <input type="text" style="border: 0px"; name="renterLocation" >
-                        <input type="text" style="border: 0px"; name="renterNumber" > </td>
+                        <input type="text" style="border: 0px"; name="renterLocation"readOnly="true" >
+                        <input type="text" style="border: 0px"; name="renterNumber" readOnly="true"> </td>
                 </tr>
                 <tr>
                     <td>合同起止日期</td>
-                    <td><input  type="text" style="border: 0px"; name="startDate" > </td>
-                    <td><input type="text" style="border: 0px"; name="endData" > </td>
+                    <td><input  type="text" style="border: 0px"; name="startDate" readOnly="true"> </td>
+                    <td><input type="text" style="border: 0px"; name="endData" readOnly="true"> </td>
                 </tr>
                 <tr>
                     <td>租金</td>
-                    <td><input  type="text" style="border: 0px"; name="srent" > </td>
+                    <td><input  type="text" style="border: 0px"; name="srent" readOnly="true"> </td>
                 </tr>
                 <tr>
                     <td>押金</td>
-                    <td><input  type="text" style="border: 0px"; name="syajin" > </td>
+                    <td><input  type="text" style="border: 0px"; name="syajin" readOnly="true"> </td>
                 </tr>
              <tr>
                     <td>房租支付方式</td>
-                    <td><input  type="text" style="border: 0px"; name="spayName" > </td>
+                    <td><input  type="text" style="border: 0px"; name="spayName"readOnly="true" > </td>
                 </tr>
 
 
@@ -84,16 +84,16 @@ buttons:[{
                     <td>水费度数</td>
                     <td>
 
-                        <input type="text" style="border: 0px"; name="water" > </td>
+                        <input type="text" style="border: 0px"; name="water" readOnly="true"> </td>
                 </tr>
 
                 <tr>
                     <td>电费度数</td>
-                    <td><input type="text" style="border: 0px"; name="dian" > </td>
+                    <td><input type="text" style="border: 0px"; name="dian" readOnly="true"> </td>
                 </tr>
                 <tr>
                     <td>气费度数</td>
-                    <td><input type="text" style="border: 0px"; name="qi" > </td>
+                    <td><input type="text" style="border: 0px"; name="qi" readOnly="true"> </td>
                 </tr>
 
 
@@ -105,12 +105,15 @@ buttons:[{
 </div>
 
 <form id="LandlordFrom" method="post">
-    <select name="temp" id="sele">
+    <select name="temp" id="sele" class="easyui-combobox" style="width:70px;">
         <option value="1"> 姓名</option>
         <option value="2"> 地址</option>
     </select>
+
+
     <input class="easyui-textbox" name = "renterName" id="textName" style="width:150px">
-    <input type="button" value="搜索" onclick="find()">
+
+    <a  onclick="find()" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>
 </form>
 
 <table id="TenantTable"></table>
@@ -147,8 +150,8 @@ buttons:[{
         $("#TenantTable").datagrid({
             url: 'findTenantList',
             toolbar: '#toolbars',
-            fit: true,//搜索
-            pagination: false, //是否展示分页
+
+            pagination: true, //是否展示分页
             pageList: [2, 5, 10, 20],//分页组件
             pageSize: 2,//默认每页条数
             columns: [[
@@ -187,7 +190,7 @@ buttons:[{
             },
             dataType:'json',
             success:function(data){
-                  alert(data.sidentity)
+
                $("#commentsfrom").form('load',data);
 
                 $("#tenantDialog").dialog('open');

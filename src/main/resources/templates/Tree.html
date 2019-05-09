@@ -29,25 +29,18 @@
 <script type="text/javascript">
     $(function(){
         gettongtree()
-        addTab()
         addTabls()
     })
     //新建选项卡
-    function addTab(){
-        $('#tabsId').tabs('add',{
-            title:'首页',
-            content:createJsp(url)
 
-        });
-    }
     function createJsp(url){
-        return '<iframe scrolling="auto" frameborder="0"  src="<%=basePath%>'+ url + '" style="width:100%;height:100%;"></iframe>';
+        return '<iframe scrolling="auto" frameborder="0"  src="'+ url + '" style="width:100%;height:100%;"></iframe>';
     }
 
     //同步树
     function gettongtree(){
         $('#tongtree').tree({
-            url:'getTreeAll'
+            url:'user/getTreeAll'
         });
 
     }
@@ -60,7 +53,7 @@
                     //如果存在当前选项卡，就让他显示这个选项卡
                     $('#tabsId').tabs('select',node.text);
                 }else{
-                    alert(node.children)
+
                     if( (node.children=="" ||  node.children==null) && node.state != 'closed'){
                         if(node.url == null ){
                             // 如果没有就新建
@@ -79,7 +72,7 @@
                         }
                     }
                 }
-                alert(node.text);  // 在用户点击的时候提示
+
             }
         });
     }

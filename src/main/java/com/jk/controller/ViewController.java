@@ -29,6 +29,7 @@ public class ViewController {
     public String index(){
         return "index";
     }
+
     @RequestMapping("tree")
     public String tree(){ return "Tree"; }
 }

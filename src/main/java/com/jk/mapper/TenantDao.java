@@ -1,16 +1,19 @@
 package com.jk.mapper;
 
 import com.jk.bean.RenterBean;
-import com.jk.bean.payType;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface TenantDao {
 
-    List<RenterBean> findTenantList(RenterBean renterBean);
 
    RenterBean findTenantListById(String rid);
 
+   
+    List<RenterBean> findTenantList(HashMap<String, Object> hashMap2);
 
+    int findTenantCount(HashMap<String, Object> hashMap2);
 }

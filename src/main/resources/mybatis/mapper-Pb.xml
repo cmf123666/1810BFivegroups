@@ -23,5 +23,42 @@
 	mayliushui
     LIMIT #{page},#{rows}
     </select>
+    <delete id="delete" parameterType="com.jk.bean.RenterBean">
+    delete from mayrenter where rid =#{0}
+    </delete>
+
+    <insert id="add" parameterType="com.jk.bean.LiushuiBean">
+    insert into mayliushui(LiushuiName,LiushuiRoom,payCount,billType,payType,payDate,Liushuilocation)
+    values(#{renterName},#{renterNumber},#{billCount},#{billType},#{payType},#{payDate},#{renterlocation})
+    </insert>
+
+    <select id="getcount" resultType="int">
+        select count(1) from  mayLiushui  where 1=1
+      <if test="b.startDate !=null">
+        and payDate &gt; #{b.startDate}
+      </if>
+      <if  test="b.endDate != null">
+          and  payDate  &lt; #{b.endDate}
+      </if>
+    </select>
+
+   <select id="query2" resultType="com.jk.bean.LiushuiBean">
+       select * from  mayLiushui  where 1=1
+       <if test="b.startDate !=null">
+           and payDate &gt; #{b.startDate}
+       </if>
+       <if  test="b.endDate != null">
+           and  payDate  &lt; #{b.endDate}
+       </if>
+       limit#{page},#{rows}
+   </select>
+
+
+    <insert id="addliushui">
+    insert into mayliushui(liushuiName,liushuiRoom,payCount,billType,payType,payDate,status)
+    values(#{l.liushuiName},#{l.liushuiRoom},#{l.payCount},#{l.billType},#{l.payType},#{l.payDate},#{l.status})
+    </insert>
+
+
 
 </mapper>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.springframework.org/schema/jdbc">
 <head>
     <meta charset="UTF-8" />
     <title>Title</title>
@@ -30,27 +30,27 @@
 <!--确认收款对话框-->
 <div id="confirmDialog" class="easyui-dialog" title="确认收款" style="width:480px;height:330px;"
      data-options="iconCls:'icon-save',resizable:true,modal:true">
-    <form id="addff" method="post">
-        实收金额：
-        <input class="easyui-textbox"  style="width:130px" align="right">
-        应收金额：<span></span>
-        <br> <br>
-        收款方式：
-        <select  class="easyui-combobox" name="dept" style="width:130px;">
-            <option>现金</option>
-            <option>支付宝</option>
-            <option>微信支付</option>
-            <option>转账</option>
-        </select>
-        收款时间：<input class="easyui-textbox"  style="width:130px" align="right">
-        <br> <br>
-        备注：<input class="easyui-textbox" data-options="multiline:true" value=" " style="width:380px;height:120px">
-        <br> <br> <br> <br>
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        <a id="btn" href="javascript:add()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">确认</a>
-        <a id="btn" href="javascript:rollbill()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
-    </form>
+
+    实收金额：
+    <input class="easyui-textbox" id="re"  style="width:130px" >
+    应收金额：<span id="cash"></span>
+    <br> <br>
+    收款方式：
+    <select id="payType" class="easyui-combobox"  style="width:130px;">
+        <option value="1">现金</option>
+        <option value="2">支付宝</option>
+        <option value="3">微信支付</option>
+        <option value="4">转账</option>
+    </select>
+    收款时间：<input class="easyui-textbox" id="ctime" style="width:130px" align="right">
+    <br> <br>
+    备注：<input class="easyui-textbox" data-options="multiline:true" value=" " style="width:380px;height:120px">
+    <br> <br> <br> <br>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <a id="btn" href="javascript:add()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">确认</a>
+    <a id="btn" href="javascript:rollbill()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+
 </div>
 <!--更多-->
 <div id="more" class="easyui-dialog" title="更多" style="width:350px;height:230px;"
@@ -58,25 +58,29 @@
     <form id="more" method="post">
         <table>
             <tr>
-                <td>账单房号：<span ></span></td>
-                <td>付款方：<span ></span></td>
+                <td>账单房号：<span id="roomlocation"></span>
+                    <span id="roomId"></span></td>
+                <td>付款方：<span id="payer"></span></td>
             </tr>
             <tr>
-                <td>账单金额：<span ></span></td>
-                <td>账单类型：<span ></span></td>
+                <td>账单金额：<span id="billcount"></span></td>
+                <td>账单类型：<span id="billtype"></span></td>
             </tr>
             <tr>
-                <td>账单时效：<span ></span></td>
+                <td>账单时效：
+                    <span id="startDate"></span>
+                    到
+                    <span id="endDate"></span>
+                </td>
                 <td></td>
             </tr>
             <tr>
-                <td>预计付款时间：<span ></span></td>
+                <td>预计付款时间：<span id="reserveTime"></span></td>
                 <td></td>
             </tr>
         </table>
         <br> <br> <br> <br>
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         <a id="btn" href="javascript:comfirmBill()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">确认收款</a>
         <a id="btn" href="javascript:roll()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">收起</a>
     </form>
@@ -96,17 +100,26 @@
             toolbar:'#tb',
             singleSelect:true,
             columns:[[
-                {field:'LiushuiId',title:'ID',width:100,hidden:true},
-                {field:'LiushuiName',title:'账单房号',formatter:function(value,row,index){
-                        return value + row.LiushuiName
+                {field:'rid',title:'ID',width:100,hidden:true},
+                {field:'startDate',title:'合同开始',width:100,hidden:true},
+                {field:'endData',title:'合同结束',width:100,hidden:true},
+                {field:'renterlocation',title:'账单房号',formatter:function(value,row,index){
+                        return value + row.renterNumber
                     }},
-                {field:'LiushuiName',title:'收款方',width:100},
-                {field:'payCount',title:'账单金额',width:100,align:'right'},
+                {field:'renterName',title:'付款方',width:100},
+                {field:'billCount',title:'账单金额',width:100,align:'right'},
                 {field:'billType',title:'账单类型',width:100,align:'right'},
                 {field:'payDate',title:'预计付款时间',width:100,align:'right'},
                 {field:'xxxx',title:'操作', formatter: function(value,row,index){
-                        var content = "<a href='javascript:comfirmBill()' class='easyui-linkbutton' iconCls:'icon-cancel'>确认付款</a>";
-                        content += " |  <a href='javascript:more()' class='easyui-linkbutton' iconCls='icon-search'>更多</a>";
+                        var content = "<a href='javascript:comfirmBill(&quot;"+row.renterlocation+"&quot;,"+
+                            row.renterNumber+",&quot;"+row.renterName+"&quot;,"+row.billCount+","+row.billType+
+                            ",&quot;"+row.payDate+"&quot;,"+
+                            ")' class='easyui-linkbutton' iconCls:'icon-cancel'>确认收款</a>";
+
+                        content += " |  <a href='javascript:more(&quot;"+row.renterlocation+"&quot;,"+row.rid+
+                            ","+row.renterNumber+",&quot;"+row.renterName+"&quot;,"+row.billCount+","+row.billType+",&quot;"
+                            +row.startDate+"&quot;,&quot;"+row.endData+"&quot;,&quot;"+row.payDate+"&quot;,"+
+                            ")' class='easyui-linkbutton' iconCls='icon-search'>更多</a>";
                         return content;
                     },width:$(this).width() * 0.1}
             ]],
@@ -116,19 +129,43 @@
         });
     }
     /*开启确认收款对话框*/
-    function  comfirmBill() {
+    function  comfirmBill(billCount) {
+        $("#re").textbox('setValue',billCount);
+        var cash = $("#cash");
+        cash.html(billCount);
+        var time1 = new Date()
+        var s1 = time1.toLocaleDateString();
+        $("#ctime").textbox('setValue',s1);
         $("#confirmDialog").dialog("open")
     }
     /**/
-    function  more() {
+    function more(roomlocation,roomId,payer,billcount,billtype,startDate,endDate,reserveTime) {
+        $("#roomlocation").html(roomlocation);
+        $("#roomId").html(roomId);
+        $("#payer").html(payer);
+        $("#billcount").html(billcount);
+        $("#billtype").html(billtype);
+        $("#startDate").html(startDate);
+        $("#endDate").html(endDate);
+        $("#reserveTime").html(reserveTime);
         $("#more").dialog("open")
     }
 
     /*点击确认方法*/
-    function add(){
+    function  add(renterlocation,rid,renterNumber,renterName,billCount,billType,payDate){
+        var payType = $("#payType").val();
         $.ajax({
-            url:"query.do",
+            url:"add",
             type:"post",
+            data:{renterlocation:renterlocation,
+                rid:rid,
+                renterNumber:renterNumber,
+                renterName:renterName,
+                billCount:billCount,
+                billType:billType,
+                payDate:payDate,
+                payType:payType
+            },
             success:function(data){
 
             }

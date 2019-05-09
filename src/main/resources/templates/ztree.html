@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="<%=basePath%>">
+    <title>标题</title>
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+    <script src="js/jquery-1.8.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="js/easyui-1.7.0/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="js/easyui-1.7.0/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="js/easyui-1.7.0/demo.css">
+    <script type="text/javascript" src="js/easyui-1.7.0/jquery.min.js"></script>
+    <script type="text/javascript" src="js/easyui-1.7.0/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/easyui-1.7.0/plugins/jquery.datagrid.js"></script>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <script type="text/javascript" src="<%=request.getContextPath()%>/ztree/js/jquery.ztree.core.min.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/ztree/js/jquery.ztree.exedit.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/js/my97/WdatePicker.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/ztree/js/jquery.ztree.excheck.min.js"></script>
+</head>
+<body class="easyui-layout">
+<div
+        data-options="region:'north',split:false,iconCls:'icon-ok',collapsible:false"
+        style="height: 100px;">
+    <center>
+        <font style="font-size: 80px">退货查询系统</font>
+
+        <input id="roleSelect" name="dept" >
+    </center>
+</div>
+<input>
+<div
+        data-options="region:'west',split:false,border:true,title:'左',iconCls:'icon-ok',collapsible:true,maxWidth:300"
+        class="easyui-accordion" style="width: 250">
+    <div title="栏目一" data-options="iconCls:'icon-ok'"
+         style="height: 300px">
+        <ul id="power" class="ztree"></ul>
+    </div>
+
+
+</div>
+<div class="easyui-tabs" id="tabsId"
+     data-options="region:'center',split:false,iconCls:'icon-save',fit:true"
+     style="overflow: auto;">
+    <div title="商品背景"
+         data-options="closable:false,fit:true"
+         style="overflow: auto;">
+        <form id="pro_from" >
+            <div>
+                <label>编号/名称</label>
+                <input id="showcc" name="mingcheng" type="text"><br>
+            </div>
+            <br>
+            <button type="button" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="search()">搜索</button>
+            <button type="button" class="easyui-linkbutton" data-options="iconCls:'icon-no'" onclick="reset()">重置</button>
+        </form>
+
+        <table id="mongodbTable"></table>
+
+    </div>
+
+</div>
+</body>
+<!-- layout布局结束 -->
+<script type="text/javascript">
+
+
+    var settings={    //在setting中做我们树的一些配置    setting  是创建树之前的要干的事情
+        check:{   //复选框  配置
+            //enable: true,    //  开启 复选框
+        },
+        data: {				//  data 中  是一些基础信息
+            key:{
+                name: "text",   //    默认 是name
+                //url:"uri",
+                //abc:"uriTab"
+            },
+            simpleData: {    	 //简单数据设置
+                enable: true,	//简单数据开启  默认为false
+                idKey: "id",  		// 指定 那个是id 可以自定义
+                pIdKey: "pid",  //  那个是父节点	可以自定义
+                rootPId: -1   	//  将几定义为父节点	可以自定义
+            }
+        },
+        view:{              //显示的设置
+            selectedMulti:false, //是否允许多个被选中
+            nameIsHTML: true,  //支持HTML  格式
+        },
+        callback:{  	// 回掉函数   的设置
+            onClick:function (event,treeId,treeNode){  // event 设置的对象   treeId  标签的id  treeNode该节点的所有参数
+                // alert(event+"~~~"+treeId+"~~~~~"+treeNode.uriTabs);
+                //alert(treeNode.uri)
+                var exists=$("#tabsId").tabs('exists',treeNode.text);
+                if(treeNode.uri!=null &&treeNode.uri.length>0 ){
+                    //alert(treeNode.text)
+
+
+                }
+
+            }
+        }
+    }
+
+
+    function createFrame(url){
+        return '<iframe src="'+url+'" frameborder="0" allowfullscreen="true" width="100%" height="100%"></iframe>'
+    }
+
+
+    function initPowerTree(){
+        $.ajax({
+            type:"post",
+            url:"user/getTreeAll",
+            success:function (msg){
+                var treeObj=$.fn.zTree.init($("#power"), settings,msg);
+            }
+        });
+    }
+
+
+    function search(){
+        $('#mongodbTable').datagrid('load',{
+            mingcheng:$("#showcc").val(),
+
+        });
+    }
+
+
+
+
+
+
+
+
+</script>
+</html>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jk.mapper.LandlordMapper">
+    <select id="queryLandlord" resultType="LandlordBean">
+    select * from mayLandlord where lid = '1'
+    </select>
+    <select id="findLandlord" resultType="LandlordBean">
+    select * from mayLandlord where 1=1
+     <if test="temp != null and temp==1">
+       and  landlordnName like concat('%',#{landlordnName},'%')
+     </if>
+     <if test="temp != null and temp==2">
+       and  listingAddress like concat('%',#{landlordnName},'%')
+     </if>
+    </select>
+    <select id="ViewDetails2" resultType="LandlordBean">
+    select * from mayLandlord ma inner join maySegContract ms on ma.lid = ms.lanId where ma.lid = #{id}
+    </select>
+    <select id="ViewDetails" resultType="LandlordBean">
+    select * from mayLandlord ma inner join mayNcontract mn on ma.lid = mn.lanId where ma.lid = #{id}
+    </select>
+    <insert id="addDetailsForm">
+        insert into mayNcontract(paymentWay,houseDeposit,houseRental,conStartDate,conEndDate,lanId) values (
+        #{paymentWay},#{houseDeposit},#{houseRental},#{conStartDate},#{conEndDate},#{lanId}
+        )
+    </insert>
+    <insert id="addDetailsForm2">
+        insert into maySegContract(paymentWay,houseDeposit,
+        firstHouseRental,firstStartDate,
+        firstEndDate,secondHouseRental,
+        secondStartDate,secondEndDate,lanId
+        ) values (
+        #{paymentWay},#{houseDeposit},#{firstHouseRental},#{firstStartDate},#{firstEndDate},
+        #{secondHouseRental},#{secondStartDate},#{secondEndDate},#{lanId}
+        )
+    </insert>
+    <update id="updateDetails">
+        update mayLandlord set status = 1 where lid = #{id}
+    </update>
+    <update id="updateLandlord">
+        update mayLandlord set startDate = #{startDate},endDate=#{endDate} where lid = #{lanId}
+    </update>
+    <update id="updateLandlord2">
+        update mayLandlord set startDate = #{firstStartDate},endDate=#{secondEndDate} where lid = #{lanId}
+    </update>
+    <delete id="removeLandlord">
+        delete from  mayLandlord where lid = #{id}
+    </delete>
+
+</mapper>
